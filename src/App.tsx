@@ -87,9 +87,11 @@ const SafeApp = (): React.ReactElement => {
 
       <Title size="md">New Batch OpenSea Purchase</Title>
 
-      <Card>
-      <TokenList tokens={tokens}/>
-      </Card>
+      {tokens.length > 0 && (
+        <Card>
+          <TokenList tokens={tokens}/>
+        </Card>
+      )}
 
       <Button size="lg" color="primary" onClick={() => setIsOpen(!isOpen)}>
         1. Select NFTs
