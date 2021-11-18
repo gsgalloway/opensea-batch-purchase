@@ -1,7 +1,7 @@
 {
   "short_name": "Safe App",
-  "name": "Gnosis Safe App Starter",
-  "description": "Describe your Safe App here",
+  "name": "Opensea Batch Purchaser",
+  "description": "Purchase multiple assets on OpenSea in one transaction",
   "iconPath": "logo.svg",
   "icons": [
     {
