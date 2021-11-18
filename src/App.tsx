@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Divider, Loader, Title } from '@gnosis.pm/safe-react-components'
+import { Button, Card, Divider, Loader, Title } from '@gnosis.pm/safe-react-components'
 import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk'
 import OpenseaBulkPurchaser from '@gsgalloway/opensea-bulk-purchaser';
 import { BigNumber, getDefaultProvider } from 'ethers';
@@ -87,10 +87,12 @@ const SafeApp = (): React.ReactElement => {
 
       <Title size="md">New Batch OpenSea Purchase</Title>
 
+      <Card>
       <TokenList tokens={tokens}/>
+      </Card>
 
       <Button size="lg" color="primary" onClick={() => setIsOpen(!isOpen)}>
-        Select NFTs
+        1. Select NFTs
       </Button>
       {isOpen && (
         <ManageListModal
@@ -115,7 +117,7 @@ const SafeApp = (): React.ReactElement => {
       <Divider />
 
       <Button size="lg" color="primary" onClick={submitTx}>
-        Construct Batch Transaction
+        2. Construct Batch Transaction
       </Button>
 
     </Container>
