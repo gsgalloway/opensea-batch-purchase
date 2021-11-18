@@ -1,7 +1,13 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Title } from '@gnosis.pm/safe-react-components'
+import { Button, Divider, Loader, Title } from '@gnosis.pm/safe-react-components'
 import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk'
+import OpenseaBulkPurchaser from '@gsgalloway/opensea-bulk-purchaser';
+import { BigNumber, getDefaultProvider } from 'ethers';
+import NFTForm from './NFTForm';
+import ManageListModal from './ManageListModal';
+import TokenList from './TokenList';
+import { TokenDescription } from './types';
 
 const Container = styled.div`
   padding: 1rem;
@@ -13,43 +19,105 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const Link = styled.a`
-  margin-top: 8px;
-`
+
 
 const SafeApp = (): React.ReactElement => {
   const { sdk, safe } = useSafeAppsSDK()
+  const [isOpen, setIsOpen] = useState(false);
+  const [tokens, setTokens] = useState<TokenDescription[]>([])
+  const [inputTokenID, setInputTokenID] = useState('');
+  const [inputTokenContractAddress, setInputTokenContractAddress] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onNFTFormSubmitted = () => {
+    setTokens([...tokens, {id: BigNumber.from(inputTokenID), contractAddress: inputTokenContractAddress}])
+  }
+
+  const onItemDeleted = (itemId: number | string): void => {
+    if (typeof(itemId) === 'string') {
+      throw new Error(`itemID ${itemId} should be number`)
+    }
+    const newTokens = [...tokens];
+    newTokens.splice(itemId, 1)
+    setTokens(newTokens);
+  }
+
+
+  const getListItems = () => {
+    return Array.from(tokens.entries()).map(([index, token]) => {
+      return {
+            id: index,
+            iconUrl: 'someUrl',
+            name: `${token.id}`,
+            description: `Token at ${token.contractAddress}`,
+            checked: true,
+            isDeletable: true,
+      };
+    })
+  }
 
   const submitTx = useCallback(async () => {
     try {
-      const { safeTxHash } = await sdk.txs.send({
-        txs: [
-          {
-            to: safe.safeAddress,
-            value: '0',
-            data: '0x',
-          },
-        ],
+      setIsLoading(true);
+      const openseaBulkPurchaser = new OpenseaBulkPurchaser(getDefaultProvider());
+      const purchaseTxs = await Promise.all(tokens.map(token => {
+        return openseaBulkPurchaser.createSingleTokenPurchase(token.id, token.contractAddress, safe.safeAddress)
+      }));
+
+      const batchTx = await openseaBulkPurchaser.createBatchTransactionFromPurchases(purchaseTxs, safe.safeAddress);
+      setIsLoading(false);
+      await sdk.txs.send({
+        txs: [{
+          to: batchTx.to,
+          value: BigNumber.from(batchTx.value).toString(),
+          data: batchTx.data,
+        }]
       })
-      console.log({ safeTxHash })
-      const safeTx = await sdk.txs.getBySafeTxHash(safeTxHash)
-      console.log({ safeTx })
-    } catch (e) {
-      console.error(e)
     }
-  }, [safe, sdk])
+    catch (e) {
+      console.error(e);
+    }
+  }, [tokens, safe, sdk])
 
   return (
     <Container>
-      <Title size="md">Safe: {safe.safeAddress}</Title>
+      {isLoading && (
+        <Loader size={"lg"} />
+      )}
+
+      <Title size="md">New Batch OpenSea Purchase</Title>
+
+      <TokenList tokens={tokens}/>
+
+      <Button size="lg" color="primary" onClick={() => setIsOpen(!isOpen)}>
+        Select NFTs
+      </Button>
+      {isOpen && (
+        <ManageListModal
+          title={"Add Token"}
+          defaultIconUrl={"https://opensea.io/static/images/logos/opensea.svg"}
+          itemList={getListItems()}
+          showDeleteButton
+          addButtonLabel="Add token to batch"
+          formBody={<NFTForm
+            tokenID={inputTokenID}
+            tokenContractAddress={inputTokenContractAddress}
+            onTokenIDChanged={setInputTokenID}
+            onTokenContractAddressChanged={setInputTokenContractAddress}
+          />}
+          onSubmitForm={onNFTFormSubmitted}
+          onClose={() => setIsOpen(false)}
+          onItemToggle={() => undefined}
+          onItemDeleted={onItemDeleted}
+        />
+      )}
+
+      <Divider />
 
       <Button size="lg" color="primary" onClick={submitTx}>
-        Click to send a test transaction
+        Construct Batch Transaction
       </Button>
 
-      <Link href="https://github.com/gnosis/safe-apps-sdk" target="_blank" rel="noreferrer">
-        Documentation
-      </Link>
     </Container>
   )
 }
