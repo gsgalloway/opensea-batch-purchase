@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/opensea-batch-purchase-react/static/js/main.31fc50d6.chunk.js",
-    "main.js.map": "/opensea-batch-purchase-react/static/js/main.31fc50d6.chunk.js.map",
+    "main.js": "/opensea-batch-purchase-react/static/js/main.756435ed.chunk.js",
+    "main.js.map": "/opensea-batch-purchase-react/static/js/main.756435ed.chunk.js.map",
     "runtime-main.js": "/opensea-batch-purchase-react/static/js/runtime-main.3910920f.js",
     "runtime-main.js.map": "/opensea-batch-purchase-react/static/js/runtime-main.3910920f.js.map",
     "static/js/2.9d87d80e.chunk.js": "/opensea-batch-purchase-react/static/js/2.9d87d80e.chunk.js",
@@ -14,6 +14,6 @@
   "entrypoints": [
     "static/js/runtime-main.3910920f.js",
     "static/js/2.9d87d80e.chunk.js",
-    "static/js/main.31fc50d6.chunk.js"
+    "static/js/main.756435ed.chunk.js"
   ]
 }
