@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Card, Divider, Loader, Title } from '@gnosis.pm/safe-react-components'
+import { Button, Card, Divider, Loader, Title, Text } from '@gnosis.pm/safe-react-components'
 import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk'
 import OpenseaBulkPurchaser from '@gsgalloway/opensea-bulk-purchaser';
 import { BigNumber, getDefaultProvider } from 'ethers';
@@ -8,6 +8,7 @@ import NFTForm from './NFTForm';
 import ManageListModal from './ManageListModal';
 import TokenList from './TokenList';
 import { TokenDescription } from './types';
+import NetworkSelect from './NetworkSelect';
 
 const Container = styled.div`
   padding: 1rem;
@@ -20,14 +21,19 @@ const Container = styled.div`
 `
 
 
+// export type Props = {
+//   openseaApiKey: string
+// }
 
-const SafeApp = (): React.ReactElement => {
+
+const SafeApp = (/*{openseaApiKey}: Props*/): React.ReactElement => {
   const { sdk, safe } = useSafeAppsSDK()
   const [isOpen, setIsOpen] = useState(false);
   const [tokens, setTokens] = useState<TokenDescription[]>([])
   const [inputTokenID, setInputTokenID] = useState('');
   const [inputTokenContractAddress, setInputTokenContractAddress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedNetwork, setSelectedNetwork] = useState('mainnet');
 
   const onNFTFormSubmitted = () => {
     setTokens([...tokens, {id: BigNumber.from(inputTokenID), contractAddress: inputTokenContractAddress}])
@@ -59,7 +65,12 @@ const SafeApp = (): React.ReactElement => {
   const submitTx = useCallback(async () => {
     try {
       setIsLoading(true);
-      const openseaBulkPurchaser = new OpenseaBulkPurchaser(getDefaultProvider());
+      const openseaApiKey = process.env.REACT_APP_OPENSEA_API_KEY
+      if (!openseaApiKey) {
+        throw new Error("must define REACT_APP_OPENSEA_API_KEY");
+      }
+      const openseaBulkPurchaser = new OpenseaBulkPurchaser(getDefaultProvider(), {openseaApiKey});
+      console.log("I'm here!", openseaBulkPurchaser, openseaApiKey);
       const purchaseTxs = await Promise.all(tokens.map(token => {
         return openseaBulkPurchaser.createSingleTokenPurchase(token.id, token.contractAddress, safe.safeAddress)
       }));
@@ -92,6 +103,10 @@ const SafeApp = (): React.ReactElement => {
           <TokenList tokens={tokens}/>
         </Card>
       )}
+
+      <Text size="lg">Network:</Text><NetworkSelect selectedNetwork={selectedNetwork} setSelectedNetwork={setSelectedNetwork} />
+
+      <br />
 
       <Button size="lg" color="primary" onClick={() => setIsOpen(!isOpen)}>
         1. Select NFTs
