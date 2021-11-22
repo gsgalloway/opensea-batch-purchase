@@ -9,6 +9,7 @@ import ManageListModal from './ManageListModal';
 import TokenList from './TokenList';
 import { TokenDescription } from './types';
 import NetworkSelect from './NetworkSelect';
+import { Network } from 'opensea-js';
 
 const Container = styled.div`
   padding: 1rem;
@@ -21,12 +22,7 @@ const Container = styled.div`
 `
 
 
-// export type Props = {
-//   openseaApiKey: string
-// }
-
-
-const SafeApp = (/*{openseaApiKey}: Props*/): React.ReactElement => {
+const SafeApp = (): React.ReactElement => {
   const { sdk, safe } = useSafeAppsSDK()
   const [isOpen, setIsOpen] = useState(false);
   const [tokens, setTokens] = useState<TokenDescription[]>([])
@@ -34,6 +30,33 @@ const SafeApp = (/*{openseaApiKey}: Props*/): React.ReactElement => {
   const [inputTokenContractAddress, setInputTokenContractAddress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedNetwork, setSelectedNetwork] = useState('mainnet');
+
+  let openseaApiKey: string;
+  if (selectedNetwork === "mainnet") {
+    if (!process.env.REACT_APP_OPENSEA_API_KEY) {
+      throw new Error("must define REACT_APP_OPENSEA_API_KEY");
+    }
+    openseaApiKey = process.env.REACT_APP_OPENSEA_API_KEY
+  } else {
+    if (!process.env.REACT_APP_RINKEBY_OPENSEA_API_KEY) {
+      throw new Error("must define REACT_APP_RINKEBY_OPENSEA_API_KEY");
+    }
+    openseaApiKey = process.env.REACT_APP_RINKEBY_OPENSEA_API_KEY
+  }
+
+  let openseaNetworkName: Network;
+  switch (selectedNetwork) {
+    case "mainnet":
+      openseaNetworkName = Network.Main;
+      break;
+    case "rinkeby":
+      openseaNetworkName = Network.Rinkeby;
+      break;
+    default:
+      throw new Error(
+        `network ${selectedNetwork} is not supported by opensea-js`
+      );
+  }
 
   const onNFTFormSubmitted = () => {
     setTokens([...tokens, {id: BigNumber.from(inputTokenID), contractAddress: inputTokenContractAddress}])
@@ -65,12 +88,7 @@ const SafeApp = (/*{openseaApiKey}: Props*/): React.ReactElement => {
   const submitTx = useCallback(async () => {
     try {
       setIsLoading(true);
-      const openseaApiKey = process.env.REACT_APP_OPENSEA_API_KEY
-      if (!openseaApiKey) {
-        throw new Error("must define REACT_APP_OPENSEA_API_KEY");
-      }
-      const openseaBulkPurchaser = new OpenseaBulkPurchaser(getDefaultProvider(), {openseaApiKey});
-      console.log("I'm here!", openseaBulkPurchaser, openseaApiKey);
+      const openseaBulkPurchaser = new OpenseaBulkPurchaser(getDefaultProvider(), {openseaApiKey, network: openseaNetworkName});
       const purchaseTxs = await Promise.all(tokens.map(token => {
         return openseaBulkPurchaser.createSingleTokenPurchase(token.id, token.contractAddress, safe.safeAddress)
       }));
@@ -88,7 +106,7 @@ const SafeApp = (/*{openseaApiKey}: Props*/): React.ReactElement => {
     catch (e) {
       console.error(e);
     }
-  }, [tokens, safe, sdk])
+  }, [tokens, safe, sdk, openseaNetworkName, openseaApiKey])
 
   return (
     <Container>
@@ -100,7 +118,7 @@ const SafeApp = (/*{openseaApiKey}: Props*/): React.ReactElement => {
 
       {tokens.length > 0 && (
         <Card>
-          <TokenList tokens={tokens}/>
+          <TokenList tokens={tokens} network={openseaNetworkName} apiKey={openseaApiKey}/>
         </Card>
       )}
 

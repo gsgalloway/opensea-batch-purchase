@@ -1,14 +1,16 @@
 import { Loader, Table, TableAlignment, TableRow, Text } from "@gnosis.pm/safe-react-components"
 import { TokenDescription } from "./types"
 import { OpenSeaPort } from "opensea-js";
-import { OpenSeaAsset } from "opensea-js/lib/types";
+import { Network, OpenSeaAsset } from "opensea-js/lib/types";
 import { formatEther } from "@ethersproject/units";
 import { InfuraProvider } from "@ethersproject/providers";
 import { useQuery } from 'react-query';
 import _ from "lodash";
 
 type Props = {
-    tokens: Array<TokenDescription>
+    tokens: Array<TokenDescription>,
+    network: Network,
+    apiKey: string,
 }
 
 type RowCell = {
@@ -17,16 +19,16 @@ type RowCell = {
     content: React.ReactNode;
 };
 
-const loadTokenAssets = async (tokens: TokenDescription[]) => {
-    const seaport = new OpenSeaPort(new InfuraProvider());
+const loadTokenAssets = async (tokens: TokenDescription[], networkName: Network, apiKey?: string) => {
+    const seaport = new OpenSeaPort(new InfuraProvider(), {networkName, apiKey});
     const assets = await Promise.all(tokens.map((token: TokenDescription) => {
         return seaport.api.getAsset({tokenAddress: token.contractAddress, tokenId: token.id.toString()})
     }));
     return assets;
 }
 
-const TokenList = ({tokens}: Props): React.ReactElement => {
-    const { isLoading, data, error } = useQuery(['loadTokenAssets', tokens], () => loadTokenAssets(tokens))
+const TokenList = ({tokens, network, apiKey}: Props): React.ReactElement => {
+    const { isLoading, data, error } = useQuery(['loadTokenAssets', tokens], () => loadTokenAssets(tokens, network, apiKey))
     if (isLoading) {
         return <Loader size="lg" />
     }

@@ -1994,10 +1994,10 @@
   dependencies:
     react-media "^1.10.0"
 
-"@gsgalloway/opensea-bulk-purchaser@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@gsgalloway/opensea-bulk-purchaser/-/opensea-bulk-purchaser-0.0.6.tgz#57756389b5554e9700f62c1ee2765d1805478059"
-  integrity sha512-iznbzf94j+eIhJWGD/40JvlXfLfjesD7WsjZtAb28k6WCv6egDFUbrDpffyCV6CfYtcdE/zTwoclK8Akh6xCeA==
+"@gsgalloway/opensea-bulk-purchaser@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@gsgalloway/opensea-bulk-purchaser/-/opensea-bulk-purchaser-0.0.8.tgz#f589d2543ecb48777ef242520500c71a03141d30"
+  integrity sha512-uex5g3wgtuBXtPVV0lXbvi1VOX6fY1PoojX139cQxNRpiabQFCZfPK2CguZ347c1wrh31D8LOp7kglzGvdofpA==
   dependencies:
     "@ethersproject/providers" "^5.5.0"
     "@gnosis.pm/safe-contracts" "^1.3.0"
