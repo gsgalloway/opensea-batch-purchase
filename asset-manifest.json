@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/opensea-batch-purchase-react/static/js/main.f6c567c5.chunk.js",
-    "main.js.map": "/opensea-batch-purchase-react/static/js/main.f6c567c5.chunk.js.map",
+    "main.js": "/opensea-batch-purchase-react/static/js/main.3e7ada11.chunk.js",
+    "main.js.map": "/opensea-batch-purchase-react/static/js/main.3e7ada11.chunk.js.map",
     "runtime-main.js": "/opensea-batch-purchase-react/static/js/runtime-main.3910920f.js",
     "runtime-main.js.map": "/opensea-batch-purchase-react/static/js/runtime-main.3910920f.js.map",
-    "static/js/2.f1514221.chunk.js": "/opensea-batch-purchase-react/static/js/2.f1514221.chunk.js",
-    "static/js/2.f1514221.chunk.js.map": "/opensea-batch-purchase-react/static/js/2.f1514221.chunk.js.map",
+    "static/js/2.1586e4b9.chunk.js": "/opensea-batch-purchase-react/static/js/2.1586e4b9.chunk.js",
+    "static/js/2.1586e4b9.chunk.js.map": "/opensea-batch-purchase-react/static/js/2.1586e4b9.chunk.js.map",
     "index.html": "/opensea-batch-purchase-react/index.html",
-    "static/js/2.f1514221.chunk.js.LICENSE.txt": "/opensea-batch-purchase-react/static/js/2.f1514221.chunk.js.LICENSE.txt",
+    "static/js/2.1586e4b9.chunk.js.LICENSE.txt": "/opensea-batch-purchase-react/static/js/2.1586e4b9.chunk.js.LICENSE.txt",
     "static/media/averta-bold.woff2": "/opensea-batch-purchase-react/static/media/averta-bold.8fdcd8d4.woff2",
     "static/media/averta-normal.woff2": "/opensea-batch-purchase-react/static/media/averta-normal.39d04879.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.3910920f.js",
-    "static/js/2.f1514221.chunk.js",
-    "static/js/main.f6c567c5.chunk.js"
+    "static/js/2.1586e4b9.chunk.js",
+    "static/js/main.3e7ada11.chunk.js"
   ]
 }
