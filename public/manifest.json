@@ -1,6 +1,6 @@
 {
   "short_name": "Safe App",
-  "name": "Opensea Batch Purchaser (2)",
+  "name": "Opensea Batch Purchaser",
   "description": "Purchase multiple assets on OpenSea in one transaction",
   "iconPath": "logo.svg",
   "icons": [
