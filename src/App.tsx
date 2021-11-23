@@ -86,13 +86,13 @@ const SafeApp = (): React.ReactElement => {
   const submitTx = useCallback(async () => {
     try {
       setIsTransactionBuilderLoading(true);
-      await (window as any).ethereum.enable();
+      await (window as any).ethereum.send('eth_requestAccounts');
       const provider = getProvider();
       const network = await provider.getNetwork();
       const signer = provider.getSigner();
 
-      const {openseaApiKey, openseaNetworkName} = getOpenseaParams(network);
-      const openseaBulkPurchaser = new OpenseaBulkPurchaser(provider, {openseaApiKey, network: openseaNetworkName});
+      const {openseaApiKey} = getOpenseaParams(network);
+      const openseaBulkPurchaser = new OpenseaBulkPurchaser(provider, {openseaApiKey, network: network.name});
       const purchaseTxs: SinglePurchaseTx[] = [];
       for (const token of tokens) {
         const purchaseTx = await openseaBulkPurchaser.createSingleTokenPurchase(token.id, token.contractAddress, safe.safeAddress);
