@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Card, Divider, Loader, Title } from '@gnosis.pm/safe-react-components'
@@ -27,12 +28,16 @@ const Container = styled.div`
   flex-direction: column;
 `
 
+declare let window: {
+  ethereum: ConstructorParameters<typeof providers.Web3Provider>[0],
+}
+
 const loadNetwork = async (provider: Provider): Promise<Network> => {
   return await provider.getNetwork();
 }
 
 const getProvider = (): Web3Provider => {
-  const provider = new providers.Web3Provider((window as any).ethereum)
+  const provider = new providers.Web3Provider(window.ethereum)
   if (!provider) {
     throw new Error("no ethereum provider registered");
   }
@@ -86,8 +91,8 @@ const SafeApp = (): React.ReactElement => {
   const submitTx = useCallback(async () => {
     try {
       setIsTransactionBuilderLoading(true);
-      await (window as any).ethereum.send('eth_requestAccounts');
       const provider = getProvider();
+      await provider.send("eth_requestAccounts", []);
       const network = await provider.getNetwork();
       const signer = provider.getSigner();
 
