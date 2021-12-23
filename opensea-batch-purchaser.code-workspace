@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "packages/lib"
+		},
+		{
+			"path": "packages/client"
+		},
+		{
+			"path": "packages/openapi"
+		},
+		{
+			"path": "packages/server"
+		}
+	],
+	"settings": {},
+	"extensions": {
+		"recommendations": [
+			"dbaeumer.vscode-eslint",
+			"esbenp.prettier-vscode"
+		]
+	}
+}

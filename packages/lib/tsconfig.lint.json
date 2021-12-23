@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "./src/**/*.ts",
+    "./test/**/*.ts",
+    "./examples/**/*.ts",
+    "./tasks/**/*.ts"
+  ],
+  "explicit-function-return-type": "error"
+}

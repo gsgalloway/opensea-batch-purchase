@@ -1,0 +1,14 @@
+{
+    "name": "@standard-crypto/opensea-batch-purchaser-openapi",
+    "version": "1.0.0",
+    "files": ["generated"],
+    "private": true,
+    "scripts": {
+        "validate": "swagger-cli validate ./swagger.yaml",
+        "generate": "yarn validate && openapi-generator-cli generate -i swagger.yaml -o dist -g typescript-node"
+    },
+    "devDependencies": {
+        "@apidevtools/swagger-cli": "^4.0.4",
+        "@openapitools/openapi-generator-cli": "^2.4.21"
+    }
+}

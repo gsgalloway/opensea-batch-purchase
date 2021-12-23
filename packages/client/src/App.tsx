@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Card, Divider, Loader, Title } from '@gnosis.pm/safe-react-components'
 import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk'
-import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@gsgalloway/opensea-bulk-purchaser';
+import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@standard-crypto/opensea-batch-purchaser';
 import { BigNumber, providers, Contract } from 'ethers';
 import NFTForm from './NFTForm';
 import ManageListModal from './ManageListModal';

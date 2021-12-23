@@ -1,0 +1,48 @@
+swagger: '2.0'
+info:
+  title: API_ID optional-string
+  description: Sample API on API Gateway with a Google Cloud Functions backend
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /hello:
+    get:
+      summary: Greet a user
+      operationId: hello
+      x-google-backend:
+        address: https://us-central1-PROJECT_ID.cloudfunctions.net/helloGET
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: string
+  /asset:
+    get:
+      summary: Fetch details of an OpenSea asset
+      operationId: get-asset
+      parameters:
+        - in: "body"
+          name: "Token"
+          description: "Token to lookup"
+          required: true
+          schema:
+            $ref: "#/definitions/Token"
+      responses:
+        '200':
+          description: Success
+definitions:
+  Address:
+    type: string
+    pattern: "/^0x[a-fA-F0-9]{40}$/"
+  Token:
+    properties:
+      contractAddress:
+        $ref: '#/definitions/Address'
+      id:
+        type: string
+    required:
+      - "contractAddress"
+      - "id"
