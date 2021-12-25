@@ -3,6 +3,8 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from 'rollup-plugin-typescript2'
 import json from '@rollup/plugin-json'
+import alias from '@rollup/plugin-alias'
+import polyfills from 'rollup-plugin-node-polyfills'
 import { uglify } from 'rollup-plugin-uglify'
 import dts from 'rollup-plugin-dts'
 
@@ -18,7 +20,7 @@ export default [
     input: 'src/index.ts',
     output: [
       {
-        file: packageJson.main,
+        file: 'dist/index.ts',
         format: 'cjs', // commonJS
         sourcemap: true,
       },
@@ -27,17 +29,15 @@ export default [
         format: 'esm', // ES Modules
         sourcemap: true,
       },
-      {
-        file: packageJson.module,
-        format: 'umd',
-        sourcemap: true,
-        name: 'openseaBulkPurchaser',
-      },
     ],
     plugins: [
       peerDepsExternal(),
       json(),
       resolve(),
+      // polyfills(),
+      // alias({
+      //   'readable-stream': 'stream',
+      // }),
       typescript({
         useTsconfigDeclarationDir: true,
         tsconfigOverride: {
@@ -48,13 +48,13 @@ export default [
         exclude: 'node_modules',
         ignoreGlobal: true,
       }),
-      uglify(),
+      // uglify(),
     ],
     external: Object.keys(globals),
   },
   {
     input: './dts/src/index.d.ts',
-    output: [{ file: 'dist/src/index.d.ts', format: 'es' }],
+    output: [{ file: 'dist/index.d.ts', format: 'es' }],
     plugins: [dts()],
   },
 ]

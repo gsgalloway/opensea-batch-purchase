@@ -29,7 +29,8 @@
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "^4.3.3",
     "@openzeppelin/contracts-upgradeable": "^4.3.3",
-    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-alias": "^3.1.8",
+    "@rollup/plugin-commonjs": "^22.0.0-4",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@typechain/ethers-v5": "^7.2.0",
@@ -66,6 +67,7 @@
     "rollup": "^2.56.3",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-dts": "^4.0.1",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-typescript2": "^0.30.0",
     "rollup-plugin-uglify": "^6.0.4",
@@ -77,8 +79,8 @@
   },
   "description": "Utility for bulk purchases of assets on OpenSea",
   "version": "0.0.10",
-  "main": "./dist/src/index.js",
-  "module": "./dist/src/index.js",
+  "main": "./src/index.ts",
+  "module": "./dist/index.es.js",
   "directories": {
     "test": "test"
   },

@@ -24,12 +24,18 @@ paths:
       summary: Fetch details of an OpenSea asset
       operationId: get-asset
       parameters:
-        - in: "body"
-          name: "Token"
-          description: "Token to lookup"
+        - in: "query"
+          name: "contractAddress"
+          description: "Contract address for the token to lookup"
           required: true
-          schema:
-            $ref: "#/definitions/Token"
+          type: string
+          pattern: "/^0x[a-fA-F0-9]{40}$/"
+        - in: "query"
+          name: "id"
+          description: "Token ID to lookup"
+          required: true
+          type: string
+          pattern: "/^[0-9]+$/"
       responses:
         '200':
           description: Success
@@ -43,6 +49,7 @@ definitions:
         $ref: '#/definitions/Address'
       id:
         type: string
+        pattern: "/^[0-9]+$/"
     required:
       - "contractAddress"
       - "id"

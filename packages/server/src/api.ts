@@ -2,12 +2,14 @@ import { OpenSeaPort } from 'opensea-js'
 import { Network as OpenseaNetwork, OpenSeaAsset } from 'opensea-js/lib/types'
 import { Network, getNetwork } from '@ethersproject/networks'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { Token } from '@standard-crypto/opensea-batch-purchaser-openapi/dist/model/models'
-import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@standard-crypto/opensea-batch-purchaser'
+// import { Token } from '@standard-crypto/opensea-batch-purchaser-openapi/dist/types/model/models'
+import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@gsgalloway/opensea-bulk-purchaser'
 
 function unreachable(value: never, message: string): Error {
   throw new Error(message)
 }
+
+type Token = any
 
 export default class API {
   constructor(
@@ -57,6 +59,7 @@ export default class API {
     const openseaBulkPurchaser = new OpenseaBulkPurchaser(this.ethProvider, { openseaApiKey, network })
     const purchaseTxs: SinglePurchaseTx[] = []
     for (const token of tokens) {
+      // TODO: rate limit
       const purchaseTx = await openseaBulkPurchaser.createSingleTokenPurchase(
         token.id,
         token.contractAddress,
