@@ -1,0 +1,9 @@
+**/*
+!package.json
+!node_modules
+!packages/lib/dist
+!packages/lib/package.json
+!packages/lib/node_modules
+!packages/server/package.json
+!packages/server/dist
+!packages/server/node_modules

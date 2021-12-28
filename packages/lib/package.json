@@ -1,6 +1,7 @@
 {
   "name": "@standard-crypto/opensea-batch-purchaser",
   "scripts": {
+    "tsc": "./node_modules/.bin/tsc",
     "build": "yarn clean && yarn compile && yarn tsc -p ./tsconfig.dist.json",
     "clean": "rm -rf dist dts",
     "compile": "yarn hardhat compile",
@@ -75,11 +76,15 @@
     "solidity-coverage": "^0.7.17",
     "ts-node": "^10.4.0",
     "typechain": "^5.2.0",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "web3": "1.6.1"
+  },
+  "resolutions": {
+    "web3": "1.6.1"
   },
   "description": "Utility for bulk purchases of assets on OpenSea",
   "version": "0.0.10",
-  "main": "./src/index.ts",
+  "main": "./dist/src/index.js",
   "module": "./dist/index.es.js",
   "directories": {
     "test": "test"

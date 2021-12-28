@@ -3,7 +3,7 @@ import { Network as OpenseaNetwork, OpenSeaAsset } from 'opensea-js/lib/types'
 import { Network, getNetwork } from '@ethersproject/networks'
 import { JsonRpcProvider } from '@ethersproject/providers'
 // import { Token } from '@standard-crypto/opensea-batch-purchaser-openapi/dist/types/model/models'
-import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@standard-crypto/opensea-batch-purchaser/src/index'
+import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@standard-crypto/opensea-batch-purchaser'
 
 function unreachable(value: never, message: string): Error {
   throw new Error(message)

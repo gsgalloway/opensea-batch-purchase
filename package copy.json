@@ -1,9 +1,0 @@
-{
-    "private": true,
-    "workspaces": {
-        "packages": ["packages/*"]
-    },
-    "resolutions": {
-        "web3": "1.6.1"
-    }
-}

@@ -2,4 +2,7 @@ import dotenv from 'dotenv'
 import { app } from './express'
 import http from 'http'
 
-http.createServer(app).listen(8080)
+const port = 8080
+
+http.createServer(app).listen(port)
+console.log(`server listening on ${port}`)
