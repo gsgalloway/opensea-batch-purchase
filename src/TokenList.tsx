@@ -5,6 +5,7 @@ import { Network, OpenSeaAsset } from "opensea-js/lib/types";
 import { formatEther } from "@ethersproject/units";
 import { InfuraProvider } from "@ethersproject/providers";
 import { useQuery } from 'react-query';
+import { backOff } from "exponential-backoff";
 import _ from "lodash";
 
 type Props = {
@@ -22,7 +23,9 @@ type RowCell = {
 const loadTokenAssets = async (tokens: TokenDescription[], networkName: Network, apiKey?: string) => {
     const seaport = new OpenSeaPort(new InfuraProvider(), {networkName, apiKey});
     const assets = await Promise.all(tokens.map((token: TokenDescription) => {
-        return seaport.api.getAsset({tokenAddress: token.contractAddress, tokenId: token.id.toString()})
+        return backOff(() => {
+            return seaport.api.getAsset({tokenAddress: token.contractAddress, tokenId: token.id.toString()})
+        })
     }));
     return assets;
 }
