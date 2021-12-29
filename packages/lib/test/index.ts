@@ -71,9 +71,11 @@ describe("BulkPurchaser", function () {
         return purchaseTx;
       })
     );
-    batchPurchase = await bulkPurchaser.createBatchTransactionFromPurchases(
-      individualPurchases,
-      gnosisSafe.address
+    batchPurchase = await bulkPurchaser.safeTransactionFromMetaTransaction(
+      await bulkPurchaser.createBatchTxFromPurchases(
+        individualPurchases,
+      ),
+      GNOSIS_SAFE_ADDRESS
     );
   });
 
@@ -113,4 +115,8 @@ describe("BulkPurchaser", function () {
     const expectedFinalBalance = parseEther("1000").sub(totalCost);
     expect(finalBalanceOfSafe).to.equal(expectedFinalBalance);
   });
+
+  it.only("DELETE ME", async function() {
+    await bulkPurchaser.createSingleTokenPurchase("6970", "0x059edd72cd353df5106d2b9cc5ab83a52287ac3a", "0x059edd72cd353df5106d2b9cc5ab83a52287ac3a")
+  })
 });

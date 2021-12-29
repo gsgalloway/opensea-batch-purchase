@@ -2,14 +2,14 @@
   "name": "@standard-crypto/opensea-batch-purchaser",
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
-    "build": "yarn clean && yarn compile && yarn tsc -p ./tsconfig.dist.json",
+    "build": "yarn clean && yarn compile && env READABLE_STREAM=disable yarn tsc -p ./tsconfig.dist.json",
     "clean": "rm -rf dist dts",
     "compile": "yarn hardhat compile",
     "test": "yarn hardhat test",
     "rollup": "rollup -c",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
-    "hardhat": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' npx hardhat"
+    "hardhat": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' ./node_modules/.bin/hardhat"
   },
   "engines": {
     "node": ">= 14"
@@ -77,9 +77,6 @@
     "ts-node": "^10.4.0",
     "typechain": "^5.2.0",
     "typescript": "^4.4.4",
-    "web3": "1.6.1"
-  },
-  "resolutions": {
     "web3": "1.6.1"
   },
   "description": "Utility for bulk purchases of assets on OpenSea",

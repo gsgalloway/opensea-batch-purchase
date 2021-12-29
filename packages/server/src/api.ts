@@ -1,62 +1,99 @@
 import { OpenSeaPort } from 'opensea-js'
 import { Network as OpenseaNetwork, OpenSeaAsset } from 'opensea-js/lib/types'
-import { Network, getNetwork } from '@ethersproject/networks'
-import { JsonRpcProvider } from '@ethersproject/providers'
-// import { Token } from '@standard-crypto/opensea-batch-purchaser-openapi/dist/types/model/models'
+import { Network } from '@ethersproject/networks'
+import { AlchemyProvider, JsonRpcProvider } from '@ethersproject/providers'
+import { Token } from '@standard-crypto/opensea-batch-purchaser-openapi/dist/types/model/models'
 import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@standard-crypto/opensea-batch-purchaser'
+import { MetaTransaction } from 'ethers-multisend';
 
 function unreachable(value: never, message: string): Error {
   throw new Error(message)
 }
 
-type Token = any
-
 export default class API {
   constructor(
     private readonly openseaApiKeys: { mainnet: string; rinkeby: string },
-    private readonly ethProvider: JsonRpcProvider,
+    private readonly ethProviders: { mainnet: JsonRpcProvider, rinkeby: JsonRpcProvider },
+    private readonly alchemyApiKeys: { mainnet: string, rinkeby: string },
   ) {}
 
-  private apiKeyFromNetworkName(networkName: OpenseaNetwork): string {
-    switch (networkName) {
-      case OpenseaNetwork.Main:
+  private openseaApiKeyFromNetwork(network: Network): string {
+    switch (network.name) {
+      case 'homestead':
         return this.openseaApiKeys.mainnet
-      case OpenseaNetwork.Rinkeby:
+      case 'rinkeby':
         return this.openseaApiKeys.rinkeby
       default:
-        throw unreachable(networkName, `No such network ${networkName as string}`)
+        throw new Error(`Unsupported network ${network.name}`)
     }
   }
 
-  private ethersNetworkFromOpensea(networkName: OpenseaNetwork): Network {
-    switch (networkName) {
-      case OpenseaNetwork.Main:
-        return getNetwork('homestead')
-      case OpenseaNetwork.Rinkeby:
-        return getNetwork('rinkeby')
+  private alchemyApiKeyFromNetwork(network: Network): string {
+    switch (network.name) {
+      case 'homestead':
+        return this.alchemyApiKeys.mainnet
+      case 'rinkeby':
+        return this.alchemyApiKeys.rinkeby
       default:
-        throw unreachable(networkName, `No such network ${networkName as string}`)
+        throw new Error(`Unsupported network ${network.name}`)
     }
   }
 
-  async getAsset({ token, networkName }: { token: Token; networkName: OpenseaNetwork }): Promise<OpenSeaAsset> {
-    const apiKey = this.apiKeyFromNetworkName(networkName)
-    const seaport = new OpenSeaPort(this.ethProvider, { networkName, apiKey })
+  private ethProviderFromNetwork(network: Network): JsonRpcProvider {
+    switch (network.name) {
+      case 'homestead':
+        return this.ethProviders.mainnet
+      case 'rinkeby':
+        return this.ethProviders.rinkeby
+      default:
+        throw new Error(`Unsupported network ${network.name}`)
+    }
+  }
+
+  private openseaNetworkName(network: Network): OpenseaNetwork {
+    switch (network.name) {
+      case 'homestead':
+        return OpenseaNetwork.Main
+      case 'rinkeby':
+        return OpenseaNetwork.Rinkeby
+      default:
+        throw new Error(`Unsupported network ${network.name}`)
+    }
+  }
+
+  // private ethersNetworkFromOpensea(networkName: OpenseaNetwork): Network {
+  //   switch (networkName) {
+  //     case OpenseaNetwork.Main:
+  //       return getNetwork('homestead')
+  //     case OpenseaNetwork.Rinkeby:
+  //       return getNetwork('rinkeby')
+  //     default:
+  //       throw unreachable(networkName, `No such network ${networkName as string}`)
+  //   }
+  // }
+
+  async getAsset({ token, network }: { token: Token; network: Network }): Promise<OpenSeaAsset> {
+    const apiKey = this.openseaApiKeyFromNetwork(network)
+    const networkName = this.openseaNetworkName(network)
+    const alchemyApiKey = this.alchemyApiKeyFromNetwork(network)
+    const alchemyProvider = new AlchemyProvider(network, alchemyApiKey)
+    const seaport = new OpenSeaPort(alchemyProvider, { networkName, apiKey })
     return await seaport.api.getAsset({ tokenAddress: token.contractAddress, tokenId: token.id })
   }
 
-  async createBulkTransaction({
+  async createBatchTransaction({
     tokens,
-    networkName,
+    network,
     tokenRecipientAddr,
   }: {
     tokens: Token[]
-    networkName: OpenseaNetwork
+    network: Network
     tokenRecipientAddr: string
-  }): Promise<SinglePurchaseTx[]> {
-    const openseaApiKey = this.apiKeyFromNetworkName(networkName)
-    const network = await this.ethersNetworkFromOpensea(networkName)
-    const openseaBulkPurchaser = new OpenseaBulkPurchaser(this.ethProvider, { openseaApiKey, network })
+  }): Promise<MetaTransaction> {
+    const openseaApiKey = this.openseaApiKeyFromNetwork(network)
+    const ethProvider = this.ethProviderFromNetwork(network)
+    const alchemyApiKey = this.alchemyApiKeyFromNetwork(network)
+    const openseaBulkPurchaser = new OpenseaBulkPurchaser(ethProvider, { openseaApiKey, network, alchemyApiKey })
     const purchaseTxs: SinglePurchaseTx[] = []
     for (const token of tokens) {
       // TODO: rate limit
@@ -67,6 +104,6 @@ export default class API {
       )
       purchaseTxs.push(purchaseTx)
     }
-    return purchaseTxs
+    return await openseaBulkPurchaser.createBatchTxFromPurchases(purchaseTxs);
   }
 }

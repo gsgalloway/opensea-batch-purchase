@@ -82,10 +82,9 @@ export default class OpenseaBulkPurchaser {
     return await this._fixBuyOrderListingDate(newTx)
   }
 
-  createBatchTransactionFromPurchases = async (
+  createBatchTxFromPurchases = async (
     individualPurchases: SinglePurchaseTx[],
-    safeAddressOrSafeNonce: string | number,
-  ): Promise<SafeTransaction> => {
+  ): Promise<MetaTransaction> => {
     const inputs = individualPurchases.map((tx): MetaTransaction => {
       return {
         to: tx.to,
@@ -94,7 +93,13 @@ export default class OpenseaBulkPurchaser {
         operation: OperationType.Call,
       }
     })
-    const metaTransaction = encodeMulti(inputs)
+    return encodeMulti(inputs)
+  }
+
+  safeTransactionFromMetaTransaction = async (
+    metaTransaction: MetaTransaction,
+    safeAddressOrSafeNonce: string | number,
+  ): Promise<SafeTransaction> => {
     let safeNonce
     if (typeof safeAddressOrSafeNonce === 'number') {
       safeNonce = safeAddressOrSafeNonce

@@ -29,27 +29,59 @@ paths:
           description: "Contract address for the token to lookup"
           required: true
           type: string
-          pattern: "/^0x[a-fA-F0-9]{40}$/"
+          pattern: "^0x[a-fA-F0-9]{40}$"
         - in: "query"
           name: "id"
           description: "Token ID to lookup"
           required: true
           type: string
-          pattern: "/^[0-9]+$/"
+          pattern: "^[0-9]+$"
+        - in: "query"
+          name: "network"
+          description: Ethereum network (Rinkeby / Homestead)
+          type: string
+          enum: [rinkeby, homestead]
+      responses:
+        '200':
+          description: Success
+  /batch-transaction:
+    post:
+      summary: Create a batch transaction
+      operationId: create-batch-transaction
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: object
+            required:
+              - tokens
+              - network
+              - recipient
+            properties:
+              tokens:
+                type: array
+                items:
+                  $ref: '#/definitions/Token'
+              network:
+                type: string
+                description: Ethereum network (Rinkeby / Homestead)
+                enum: [rinkeby, homestead]
+              recipient:
+                $ref: "#/definitions/Address"
       responses:
         '200':
           description: Success
 definitions:
   Address:
     type: string
-    pattern: "/^0x[a-fA-F0-9]{40}$/"
+    pattern: "^0x[a-fA-F0-9]{40}$"
   Token:
     properties:
       contractAddress:
         $ref: '#/definitions/Address'
       id:
         type: string
-        pattern: "/^[0-9]+$/"
+        pattern: "^[0-9]+$"
     required:
       - "contractAddress"
       - "id"

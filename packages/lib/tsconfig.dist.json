@@ -1,8 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "include": ["./src/**/*.ts"],
+  "exclude": ["./hardhat.config.ts"],
   "compilerOptions": {
     "declarationDir": "dist",
-    "module": "commonjs"
+    "module": "commonjs",
+    "rootDirs": ["./src", "./typechain"]
   }
 }

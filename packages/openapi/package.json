@@ -6,10 +6,11 @@
     ],
     "private": true,
     "scripts": {
+        "openapi-generator-cli": "./node_modules/.bin/openapi-generator-cli",
         "validate": "swagger-cli validate ./swagger.yaml",
         "generate": "yarn validate && yarn generate:types && yarn generate:server",
-        "generate:types": "openapi-generator-cli generate -i swagger.yaml -o dist/types -g typescript-node",
-        "generate:server": "openapi-generator-cli generate -i swagger.yaml -o dist/server -g nodejs-express-server"
+        "generate:types": "yarn openapi-generator-cli generate -i swagger.yaml -o dist/types -g typescript-node",
+        "generate:server": "yarn openapi-generator-cli generate -i swagger.yaml -o dist/server -g nodejs-express-server"
     },
     "devDependencies": {
         "@apidevtools/swagger-cli": "^4.0.4",
