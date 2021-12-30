@@ -1,16 +1,14 @@
 {
     "name": "@standard-crypto/opensea-batch-purchaser-openapi",
     "version": "1.0.0",
-    "files": [
-        "generated"
-    ],
     "private": true,
     "scripts": {
         "openapi-generator-cli": "./node_modules/.bin/openapi-generator-cli",
         "validate": "swagger-cli validate ./swagger.yaml",
-        "generate": "yarn validate && yarn generate:types && yarn generate:server",
+        "generate": "yarn validate && yarn generate:types && yarn generate:server && yarn generate:client",
         "generate:types": "yarn openapi-generator-cli generate -i swagger.yaml -o dist/types -g typescript-node",
-        "generate:server": "yarn openapi-generator-cli generate -i swagger.yaml -o dist/server -g nodejs-express-server"
+        "generate:server": "yarn openapi-generator-cli generate -i swagger.yaml -o dist/server -g nodejs-express-server",
+        "generate:client": "yarn openapi-generator-cli generate -i swagger.yaml -o dist/client -g typescript-axios"
     },
     "devDependencies": {
         "@apidevtools/swagger-cli": "^4.0.4",

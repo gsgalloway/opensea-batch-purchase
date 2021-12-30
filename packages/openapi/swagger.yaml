@@ -8,17 +8,6 @@ schemes:
 produces:
   - application/json
 paths:
-  /hello:
-    get:
-      summary: Greet a user
-      operationId: hello
-      x-google-backend:
-        address: https://us-central1-PROJECT_ID.cloudfunctions.net/helloGET
-      responses:
-        '200':
-          description: A successful response
-          schema:
-            type: string
   /asset:
     get:
       summary: Fetch details of an OpenSea asset
@@ -39,11 +28,14 @@ paths:
         - in: "query"
           name: "network"
           description: Ethereum network (Rinkeby / Homestead)
+          required: true
           type: string
           enum: [rinkeby, homestead]
       responses:
         '200':
           description: Success
+          schema:
+            type: object
   /batch-transaction:
     post:
       summary: Create a batch transaction
@@ -71,10 +63,22 @@ paths:
       responses:
         '200':
           description: Success
+          schema:
+            $ref: '#/definitions/MetaTransaction'
 definitions:
   Address:
     type: string
     pattern: "^0x[a-fA-F0-9]{40}$"
+  MetaTransaction:
+    properties:
+      to:
+        $ref: '#/definitions/Address'
+      value:
+        type: string
+      data:
+        type: string
+      operation:
+        type: string
   Token:
     properties:
       contractAddress:

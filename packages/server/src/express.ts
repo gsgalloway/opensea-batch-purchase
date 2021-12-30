@@ -3,6 +3,7 @@ import { Token } from '@standard-crypto/opensea-batch-purchaser-openapi/dist/typ
 import { MetaTransaction } from 'ethers-multisend'
 import express, { Request } from 'express'
 import { OpenSeaAsset } from 'opensea-js/lib/types'
+import cors from 'cors';
 
 import API from './api'
 
@@ -45,6 +46,9 @@ type EmptyObject = Record<string, never>
 
 const _app = express()
 _app.use(express.json())
+_app.use(cors({
+  origin: "*",
+}))
 
 _app.get('/hello', function (req, res) {
   res.send('Hello!')

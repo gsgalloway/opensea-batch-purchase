@@ -2,12 +2,16 @@ import { OpenSeaPort } from 'opensea-js'
 import { Network as OpenseaNetwork, OpenSeaAsset } from 'opensea-js/lib/types'
 import { Network } from '@ethersproject/networks'
 import { AlchemyProvider, JsonRpcProvider } from '@ethersproject/providers'
-import { Token } from '@standard-crypto/opensea-batch-purchaser-openapi/dist/types/model/models'
 import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@standard-crypto/opensea-batch-purchaser'
 import { MetaTransaction } from 'ethers-multisend';
 
 function unreachable(value: never, message: string): Error {
   throw new Error(message)
+}
+
+type Token = {
+  id: string
+  contractAddress: string
 }
 
 export default class API {
