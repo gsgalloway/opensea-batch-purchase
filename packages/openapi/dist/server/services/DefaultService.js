@@ -2,18 +2,16 @@
 const Service = require('./Service');
 
 /**
-* Fetch details of an OpenSea asset
+* Create a batch transaction
 *
-* contractAddress String Contract address for the token to lookup
-* id String Token ID to lookup
-* no response value expected for this operation
+* body InlineObject  (optional)
+* returns SafeTransaction
 * */
-const getAsset = ({ contractAddress, id }) => new Promise(
+const createBatchTransaction = ({ body }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
-        contractAddress,
-        id,
+        body,
       }));
     } catch (e) {
       reject(Service.rejectResponse(
@@ -24,14 +22,20 @@ const getAsset = ({ contractAddress, id }) => new Promise(
   },
 );
 /**
-* Greet a user
+* Fetch details of an OpenSea asset
 *
-* returns String
+* contractAddress String Contract address for the token to lookup
+* id String Token ID to lookup
+* network String Ethereum network (Rinkeby / Homestead)
+* returns Object
 * */
-const hello = () => new Promise(
+const getAsset = ({ contractAddress, id, network }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
+        contractAddress,
+        id,
+        network,
       }));
     } catch (e) {
       reject(Service.rejectResponse(
@@ -43,6 +47,6 @@ const hello = () => new Promise(
 );
 
 module.exports = {
+  createBatchTransaction,
   getAsset,
-  hello,
 };

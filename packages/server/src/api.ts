@@ -3,7 +3,7 @@ import { Network as OpenseaNetwork, OpenSeaAsset } from 'opensea-js/lib/types'
 import { Network } from '@ethersproject/networks'
 import { AlchemyProvider, JsonRpcProvider } from '@ethersproject/providers'
 import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@standard-crypto/opensea-batch-purchaser'
-import { MetaTransaction } from 'ethers-multisend';
+import { SafeTransaction } from '@gnosis.pm/safe-contracts'
 
 function unreachable(value: never, message: string): Error {
   throw new Error(message)
@@ -65,17 +65,6 @@ export default class API {
     }
   }
 
-  // private ethersNetworkFromOpensea(networkName: OpenseaNetwork): Network {
-  //   switch (networkName) {
-  //     case OpenseaNetwork.Main:
-  //       return getNetwork('homestead')
-  //     case OpenseaNetwork.Rinkeby:
-  //       return getNetwork('rinkeby')
-  //     default:
-  //       throw unreachable(networkName, `No such network ${networkName as string}`)
-  //   }
-  // }
-
   async getAsset({ token, network }: { token: Token; network: Network }): Promise<OpenSeaAsset> {
     const apiKey = this.openseaApiKeyFromNetwork(network)
     const networkName = this.openseaNetworkName(network)
@@ -89,11 +78,13 @@ export default class API {
     tokens,
     network,
     tokenRecipientAddr,
+    safeAddr,
   }: {
     tokens: Token[]
     network: Network
     tokenRecipientAddr: string
-  }): Promise<MetaTransaction> {
+    safeAddr: string
+  }): Promise<SafeTransaction> {
     const openseaApiKey = this.openseaApiKeyFromNetwork(network)
     const ethProvider = this.ethProviderFromNetwork(network)
     const alchemyApiKey = this.alchemyApiKeyFromNetwork(network)
@@ -108,6 +99,8 @@ export default class API {
       )
       purchaseTxs.push(purchaseTx)
     }
-    return await openseaBulkPurchaser.createBatchTxFromPurchases(purchaseTxs);
+    const metaTx = await openseaBulkPurchaser.createBatchTxFromPurchases(purchaseTxs);
+    const safeTx = await openseaBulkPurchaser.safeTransactionFromMetaTransaction(metaTx, safeAddr)
+    return safeTx
   }
 }

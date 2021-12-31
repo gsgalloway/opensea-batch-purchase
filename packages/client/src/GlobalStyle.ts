@@ -29,6 +29,14 @@ const GlobalStyle = createGlobalStyle`
         url(${avertaFont}) format('woff2'),
         url(${avertaBoldFont}) format('woff');
     }
+
+    .NetworkName {
+        background: #E8673C;
+        color: white;
+        padding: 3px;
+        margin: 3px;
+        border-radius: 5px;
+    }
 `
 
 export default GlobalStyle

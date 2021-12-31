@@ -36,6 +36,10 @@ paths:
           description: Success
           schema:
             type: object
+        '404':
+          description: 'Not Found'
+        '500':
+          description: 'Internal Server Error'
   /batch-transaction:
     post:
       summary: Create a batch transaction
@@ -49,6 +53,7 @@ paths:
               - tokens
               - network
               - recipient
+              - gnosisSafeAddress
             properties:
               tokens:
                 type: array
@@ -60,16 +65,20 @@ paths:
                 enum: [rinkeby, homestead]
               recipient:
                 $ref: "#/definitions/Address"
+              gnosisSafeAddress:
+                $ref: "#/definitions/Address"
       responses:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/MetaTransaction'
+            $ref: '#/definitions/SafeTransaction'
+        '500':
+          description: 'Internal Server Error'
 definitions:
   Address:
     type: string
     pattern: "^0x[a-fA-F0-9]{40}$"
-  MetaTransaction:
+  SafeTransaction:
     properties:
       to:
         $ref: '#/definitions/Address'
@@ -79,6 +88,29 @@ definitions:
         type: string
       operation:
         type: string
+      safeTxGas:
+        type: string
+      baseGas:
+        type: string
+      gasPrice:
+        type: string
+      gasToken:
+        $ref: '#/definitions/Address'
+      refundReceiver:
+        $ref: '#/definitions/Address'
+      nonce:
+        type: string
+    required:
+      - "to"
+      - "value"
+      - "data"
+      - "operation"
+      - "safeTxGas"
+      - "baseGas"
+      - "gasPrice"
+      - "gasToken"
+      - "refundReceiver"
+      - "nonce"
   Token:
     properties:
       contractAddress:

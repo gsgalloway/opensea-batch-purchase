@@ -1,5 +1,7 @@
 import localVarRequest from 'request';
 
+export * from './inlineObject';
+export * from './safeTransaction';
 export * from './token';
 
 import * as fs from 'fs';
@@ -15,6 +17,8 @@ export interface RequestDetailedFile {
 export type RequestFile = string | Buffer | fs.ReadStream | RequestDetailedFile;
 
 
+import { InlineObject } from './inlineObject';
+import { SafeTransaction } from './safeTransaction';
 import { Token } from './token';
 
 /* tslint:disable:no-unused-variable */
@@ -30,9 +34,12 @@ let primitives = [
                  ];
 
 let enumsMap: {[index: string]: any} = {
+        "InlineObject.NetworkEnum": InlineObject.NetworkEnum,
 }
 
 let typeMap: {[index: string]: any} = {
+    "InlineObject": InlineObject,
+    "SafeTransaction": SafeTransaction,
     "Token": Token,
 }
 

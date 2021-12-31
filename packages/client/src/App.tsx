@@ -1,73 +1,114 @@
 import React, { useCallback, useEffect, useState } from 'react'
-// import styled from 'styled-components'
-import { Card, Divider, Dot, Loader, Title, Text, Button, Accordion, AccordionSummary, IconText, AccordionDetails } from '@gnosis.pm/safe-react-components'
-import { BigNumber, Signer } from 'ethers';
+import { Tab, Title } from '@gnosis.pm/safe-react-components'
+import { BigNumber } from 'ethers';
 import { TokenDescription } from './types';
-import { Provider, Network, getNetwork, Web3Provider } from '@ethersproject/providers';
-import { useQuery } from 'react-query';
-import { capitalizeFirstLetter } from './utils';
+import { Network, getNetwork, Web3Provider } from '@ethersproject/providers';
+import { useQueries, useQuery } from 'react-query';
+import { isForSale, NetworkConnectionInfo, unreachable } from './utils';
 import Web3Modal from 'web3modal'
 import WalletLink from 'walletlink'
-import NFTForm from './NFTForm';
-import ManageListModal from './ManageListModal';
-import openseaDetailsImage from './opensea_details.png';
-import TokenList from './TokenList';
-import { Configuration, DefaultApi } from './api';
+import { Configuration, DefaultApi, InlineObjectNetworkEnum, SafeTransaction } from './api';
+import { OpenSeaAsset } from 'opensea-js/lib/types';
+import { Item } from '@gnosis.pm/safe-react-components/dist/navigation/Tab';
+import Step1 from './steps/Step1'
+import Step4 from './steps/Step4';
+import Step5 from './steps/Step5';
+import Step2 from './steps/Step2';
+import Step3 from './steps/Step3';
+import Step6 from './steps/Step6';
 import './App.css';
 
-// const Container = styled.div`
-//   padding: 1rem;
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-direction: column;
-// `
 
 const web3Modal = new Web3Modal({
-  cacheProvider: false,
-  providerOptions: {
-    'custom-walletlink': {
-      display: {
-        logo: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0',
-        name: 'Coinbase',
-        description: 'Connect to Coinbase Wallet (not Coinbase App)',
-      },
-      options: {
-        appName: 'Coinbase', // Your app name
-        networkUrl: `https://mainnet.infura.io/v3/`,
-        chainId: 1,
-      },
-      package: WalletLink,
-      connector: async (_, options) => {
-        const { appName, networkUrl, chainId } = options
-        const walletLink = new WalletLink({
-          appName,
-        })
-        const provider = walletLink.makeWeb3Provider(networkUrl, chainId)
-        await provider.enable()
-        return provider
-      },
-    }
-  }
+  cacheProvider: true,
 })
 
-type NetworkConnectionInfo = {
-  provider: any,
-  web3Provider: Web3Provider,
-  signer: Signer,
-  address: string,
-  network: Network
+const loadTokenAsset = async (token: TokenDescription, api: DefaultApi, network: Network): Promise<OpenSeaAsset> => {
+  const resp = await api.getAsset(token.contractAddress, token.id.toString(), network.name as any, {
+    validateStatus: (status) => status === 200,
+  })
+  const sellOrders = (resp.data as OpenSeaAsset).sellOrders
+  if (sellOrders) {
+      sellOrders.sort((order1, order2) => {
+          const [bn1, bn2] = [order1, order2].map(BigNumber.from)
+          if (bn1.lt(bn2)) return -1
+          if (bn1.gt(bn2)) return 1
+          return 0;
+      })
+  }
+  return resp.data as OpenSeaAsset
 }
 
+const api = new DefaultApi(new Configuration({
+  basePath: "http://localhost:8080",
+}));
+
 const SafeApp = (): React.ReactElement => {
+  const [selectedTabIndex, setSelectedTabIndex] = useState('1');
   const [isManageListModalOpen, setIsManageListModalOpen] = useState(false);
   const [tokens, setTokens] = useState<TokenDescription[]>([])
   const [inputTokenID, setInputTokenID] = useState('');
   const [inputTokenContractAddress, setInputTokenContractAddress] = useState('');
-  const [isTransactionBuilderLoading, setIsTransactionBuilderLoading] = useState(false);
   const [networkConnectionInfo, setNetworkConnectionInfo] = useState<NetworkConnectionInfo | undefined>(undefined);
+  const [safeAddress, setSafeAddress] = useState(networkConnectionInfo?.address);
+
+  const tokenListings = useQueries(
+    networkConnectionInfo ? tokens.map(token => {
+        return {
+            queryKey: ['loadTokenAsset', token.contractAddress, token.id],
+            queryFn: () => loadTokenAsset(token, api, networkConnectionInfo.network),
+            refetchOnWindowFocus: false,
+            staleTime: Infinity,
+        }
+    }) : []
+  )
+
+  const submitTransactionQueryFn = async (): Promise<SafeTransaction> => {
+    if (!networkConnectionInfo) {
+      throw new Error("No connection to Web3 provider")
+    }
+    const networkName = networkConnectionInfo.network.name as InlineObjectNetworkEnum
+    switch (networkName) {
+      case InlineObjectNetworkEnum.Homestead:
+      case InlineObjectNetworkEnum.Rinkeby:
+        break
+      default:
+        throw unreachable(networkName, `Unsupported network "${networkName}"`)
+    }
+    const serializedTokens = tokens.map(token => {
+      return {
+        ...token,
+        id: token.id.toString()
+      }
+    })
+    if (safeAddress === undefined) {
+      throw new Error("No safe address set");
+    }
+    setSelectedTabIndex('6')
+    const response = await api.createBatchTransaction({
+      network: networkName,
+      gnosisSafeAddress: safeAddress,
+      recipient: safeAddress,
+      tokens: serializedTokens,
+    }, {
+      validateStatus: (status) => status === 200,  
+    })
+    return response.data;
+  }
+
+  const { 
+    data: safeTransaction,
+    isLoading: isSafeTransactionLoading,
+    isError: isSafeTransactionError,
+    isSuccess: isSafeTransactionSuccess,
+    error: safeTransactionError,
+    refetch: submitTransaction,
+  } = useQuery(["submitTransaction", tokens], {
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    enabled: false, // turned off by default, manual refetch happens when Submit button is clicked
+    queryFn: submitTransactionQueryFn,
+  });
 
   const connect = useCallback(async function () {
     // This is the initial `provider` that is returned when
@@ -98,6 +139,7 @@ const SafeApp = (): React.ReactElement => {
       }
       setNetworkConnectionInfo(undefined)
       setIsManageListModalOpen(false);
+      setSelectedTabIndex('2');
     },
     [networkConnectionInfo]
   )
@@ -147,72 +189,6 @@ const SafeApp = (): React.ReactElement => {
     }
   }, [networkConnectionInfo, disconnect])
 
-  const api = new DefaultApi(new Configuration({
-    basePath: "http://localhost:8080",
-  }));
-
-  const submitTx = useCallback(async () => {
-    try {
-      setIsTransactionBuilderLoading(true);
-      // const provider = getProvider();
-      // await provider.send("eth_requestAccounts", []);
-      // const network = await provider.getNetwork();
-      // const signer = provider.getSigner();
-
-      // const {openseaApiKey} = getOpenseaParams(network);
-      // const openseaBulkPurchaser = new OpenseaBulkPurchaser(provider, {openseaApiKey, network: network.name});
-      // const purchaseTxs: SinglePurchaseTx[] = [];
-      // for (const token of tokens) {
-      //   const purchaseTx = await openseaBulkPurchaser.createSingleTokenPurchase(token.id, token.contractAddress, safe.safeAddress);
-      //   purchaseTxs.push(purchaseTx);
-      // }
-
-      // const batchTx = await openseaBulkPurchaser.createBatchTxFromPurchases(purchaseTxs);
-      // const safeTx = await openseaBulkPurchaser.safeTransactionFromMetaTransaction(batchTx, safe.safeAddress);
-      // const safeContract = new Contract(safe.safeAddress, gnosisSafeABI, provider);
-
-      // const safeTxHash = calculateSafeTransactionHash(safeContract, safeTx, network.chainId);
-
-      // const signature = await signHash(signer, safeTxHash);
-
-      // let safeServiceURL = 'https://safe-transaction.gnosis.io';
-      // if (network.name === 'rinkeby') {
-      //   safeServiceURL = 'https://safe-transaction.rinkeby.gnosis.io';
-      // }
-      // const safeService = new SafeServiceClient(safeServiceURL);
-
-      // const ethSafeTx = new EthSafeTransaction({
-      //   baseGas: BigNumber.from(safeTx.baseGas).toNumber(),
-      //   data: safeTx.data,
-      //   gasPrice: BigNumber.from(safeTx.gasPrice).toNumber(),
-      //   gasToken: safeTx.gasToken,
-      //   nonce: BigNumber.from(safeTx.nonce).toNumber(),
-      //   operation: safeTx.operation,
-      //   refundReceiver: safeTx.refundReceiver,
-      //   safeTxGas: BigNumber.from(safeTx.safeTxGas).toNumber(),
-      //   to: safeTx.to,
-      //   value: BigNumber.from(safeTx.value).toString(),
-      // })
-      // ethSafeTx.addSignature(new EthSignSignature(signature.signer, signature.data));
-
-      // await safeService.proposeTransaction({
-      //   safeAddress: safe.safeAddress,
-      //   safeTransaction: ethSafeTx,
-      //   senderAddress: await signer.getAddress(),
-      //   safeTxHash: safeTxHash,
-      // })
-
-      // alert("Transaction proposed! Please review and execute on the Transactions tab in the Gnosis UI.")
-    }
-    catch (e) {
-      console.error(e);
-      alert(e);
-    }
-    finally {
-      setIsTransactionBuilderLoading(false);
-    }
-  }, [tokens])
-
   const onNFTFormSubmitted = () => {
     setTokens([...tokens, {id: BigNumber.from(inputTokenID), contractAddress: inputTokenContractAddress}])
   }
@@ -226,120 +202,115 @@ const SafeApp = (): React.ReactElement => {
     setTokens(newTokens);
   }
 
+  const supportedNetworks = [getNetwork('homestead'), getNetwork('rinkeby')]
 
-  const getListItems = () => {
-    return Array.from(tokens.entries()).map(([index, token]) => {
-      return {
-            id: index,
-            iconUrl: 'someUrl',
-            name: `${token.id}`,
-            description: `Token at ${token.contractAddress}`,
-            checked: true,
-            isDeletable: true,
-      };
-    })
+  const validateTokenList = (): Error | null => {
+    if (tokenListings.length === 0) {
+      return new Error("Must select tokens")
+    }
+    for (const {data: asset, isLoading, isError, error} of tokenListings) {
+      if (isLoading) return new Error("Loading token listings...")
+      if (isError) {
+        console.error(error)
+        return new Error("Failed to load tokens")
+      }
+      if (asset === undefined) return new Error("Invalid data received for token listing")
+      if (!isForSale(asset)) return new Error("Remove any assets not for sale")
+    }
+    return null
   }
 
-  const supportedNetworks = [getNetwork('homestead'), getNetwork('rinkeby')]
+  const tokenListError = validateTokenList();
+
+  const shouldShowStepFour =  networkConnectionInfo !== undefined && !tokenListError
+  const shouldShowStepFive = shouldShowStepFour && safeAddress;
+  const shouldShowStepSix = shouldShowStepFive && (isSafeTransactionLoading || isSafeTransactionError || isSafeTransactionSuccess);
+
+  const getTabItems = (): Item[] => {
+    const items: Item[] = [{
+      id: '1',
+      label: '1. Introduction',
+    }, {
+      id: '2',
+      label: '2. Connect Provider'
+    }, {
+      id: '3',
+      label: '3. Select Assets',
+      disabled: !networkConnectionInfo,
+    }, {
+      id: '4',
+      label: '4. Gnosis Safe Address',
+      disabled: !shouldShowStepFour,
+    }, {
+      id: '5',
+      label: '5. Build Transaction Data',
+      disabled: !shouldShowStepFive,
+    }, {
+      id: '6',
+      label: '6. Review and Submit',
+      disabled: !shouldShowStepSix,
+    }]
+    return items;
+  }
+
+  const tabContent = (): JSX.Element => {
+    switch (selectedTabIndex) {
+      default:
+      case '1':
+        return <Step1 supportedNetworks={supportedNetworks} toNextTab={() => setSelectedTabIndex('2')}/>
+      case '2':
+        return <Step2 
+          connect={connect} 
+          disconnect={disconnect} 
+          networkConnectionInfo={networkConnectionInfo}
+          toNextTab={() => setSelectedTabIndex('3')}
+          supportedNetworks={supportedNetworks}
+        />
+      case '3':
+        return <Step3
+          isManageListModalOpen={isManageListModalOpen}
+          setIsManageListModalOpen={setIsManageListModalOpen}
+          tokens={tokens}
+          tokenListings={tokenListings}
+          inputTokenID={inputTokenID}
+          setInputTokenID={setInputTokenID}
+          inputTokenContractAddress={inputTokenContractAddress}
+          setInputTokenContractAddress={setInputTokenContractAddress}
+          onSubmitForm={onNFTFormSubmitted}
+          onItemDeleted={onItemDeleted}
+          toNextTab={() => setSelectedTabIndex('4')}
+          tokenListError={tokenListError}
+        />
+      case '4':
+        return <Step4 address={safeAddress!} onChangeAddress={setSafeAddress} toNextTab={() => setSelectedTabIndex('5')}/>
+      case '5':
+        return <Step5 onSubmitTransaction={() => submitTransaction()}/>
+      case '6':
+        return <Step6 
+          safeTransaction={safeTransaction} 
+          isLoading={isSafeTransactionLoading} 
+          isError={isSafeTransactionError} 
+          isSuccess={isSafeTransactionSuccess} 
+          error={safeTransactionError as Error | undefined} 
+          signer={networkConnectionInfo!.signer}
+          signerAddress={networkConnectionInfo!.address}
+          network={networkConnectionInfo!.network}
+          provider={networkConnectionInfo!.provider}
+          safeAddress={safeAddress!}
+        />
+    }
+  }
 
   return (
     <div className='App'>
-      <Title size="md">Create a Batch OpenSea Purchase</Title>
+      <Title size="md">Create Batch OpenSea Purchase</Title>
 
-      <Card className="card">
-          <Dot color="primary">
-              <Text size="xl" color="white">
-                  1
-              </Text>
-          </Dot>
-          <Title size="xs">Introduction</Title>
-          <Text size="xl">This app allows for creation of a single transaction to purchase multiple OpenSea assets in batch. The purchase is constructed with all-or-nothing atomicity.</Text>
-          <Text size="xl"> TODO: describe components </Text>
-          <Divider/>
-          <Text size="xl">Currently supports: {
-              supportedNetworks.map((network) =>
-                  (<span className="networkName">{capitalizeFirstLetter(network.name)} </span>))
-          }
-          </Text>
-      </Card>
-
-      <Card className="card">
-          <Dot color="primary">
-              <Text size="xl" color="white">
-                  2
-              </Text>
-          </Dot>
-          <Title size="xs">Connect Web3 Provider</Title>
-          {networkConnectionInfo ? (
-            <div>
-              <Text size="lg">Connected to: <span className="networkName">{capitalizeFirstLetter(networkConnectionInfo.network.name)}</span></Text>
-              <Text size="lg">Address: {networkConnectionInfo.address}</Text>
-              <Divider/>
-              <Button size="md" onClick={disconnect}>
-                Disconnect
-              </Button>
-            </div>
-          ) : (
-            <Button size="md" onClick={connect}>
-              Connect
-            </Button>
-          )}
-      </Card>
-      
-      {networkConnectionInfo ? (
-        <Card className="card">
-          <Dot color="primary">
-            <Text size="xl" color="white">
-                3
-            </Text>
-          </Dot>
-          <Title size="xs"> Select Assets</Title>
-          <Text size="xl">Enter a list of tokens to purchase. For each you must provide the token's Contract Address and ID</Text>
-          <Accordion>
-            <AccordionSummary>
-              <IconText
-                iconSize="sm"
-                textSize="xl"
-                iconType="info"
-                text="How to locate token's Contract Address and ID"
-              />
-            </AccordionSummary>
-            <AccordionDetails>
-              <Text size="lg">The contract address and token ID can be found on the asset's details page within the OpenSea app, by locating the "Details" dropdown midway through the page.</Text>
-              <img src={openseaDetailsImage} alt="openseaExample" style={{width: "50%"}}></img>
-            </AccordionDetails>
-          </Accordion>
-          <Button size="md" color="primary" onClick={() => setIsManageListModalOpen(!isManageListModalOpen)}>
-            Edit List
-          </Button>
-          {isManageListModalOpen && (
-            <ManageListModal
-              title={"Add Token"}
-              defaultIconUrl={"https://opensea.io/static/images/logos/opensea.svg"}
-              itemList={getListItems()}
-              showDeleteButton
-              addButtonLabel="Add token to batch"
-              formBody={<NFTForm
-                tokenID={inputTokenID}
-                tokenContractAddress={inputTokenContractAddress}
-                onTokenIDChanged={setInputTokenID}
-                onTokenContractAddressChanged={setInputTokenContractAddress}
-              />}
-              onSubmitForm={onNFTFormSubmitted}
-              onClose={() => setIsManageListModalOpen(false)}
-              onItemToggle={() => undefined}
-              onItemDeleted={onItemDeleted}
-            />
-          )}
-        </Card>
-      ): <div/>}
-
-      {networkConnectionInfo && tokens.length > 0 ? (
-        <Card className="card">
-          <TokenList tokens={tokens} network={networkConnectionInfo.network} api={api}/>
-        </Card>
-      ) : <div/>}
-    
+      <Tab 
+        items={getTabItems()}
+        onChange={setSelectedTabIndex}
+        selectedTab={selectedTabIndex}
+      />
+      {tabContent()}
     </div>
   )
 }

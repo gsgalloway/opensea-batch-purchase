@@ -8,16 +8,16 @@
 
 const Controller = require('./Controller');
 const service = require('../services/DefaultService');
+const createBatchTransaction = async (request, response) => {
+  await Controller.handleRequest(request, response, service.createBatchTransaction);
+};
+
 const getAsset = async (request, response) => {
   await Controller.handleRequest(request, response, service.getAsset);
 };
 
-const hello = async (request, response) => {
-  await Controller.handleRequest(request, response, service.hello);
-};
-
 
 module.exports = {
+  createBatchTransaction,
   getAsset,
-  hello,
 };

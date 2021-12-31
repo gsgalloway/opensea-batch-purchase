@@ -45,6 +45,12 @@ export interface InlineObject {
      * @memberof InlineObject
      */
     'recipient': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject
+     */
+    'gnosisSafeAddress': string;
 }
 
 /**
@@ -59,33 +65,69 @@ export enum InlineObjectNetworkEnum {
 /**
  * 
  * @export
- * @interface MetaTransaction
+ * @interface SafeTransaction
  */
-export interface MetaTransaction {
+export interface SafeTransaction {
     /**
      * 
      * @type {string}
-     * @memberof MetaTransaction
+     * @memberof SafeTransaction
      */
-    'to'?: string;
+    'to': string;
     /**
      * 
      * @type {string}
-     * @memberof MetaTransaction
+     * @memberof SafeTransaction
      */
-    'value'?: string;
+    'value': string;
     /**
      * 
      * @type {string}
-     * @memberof MetaTransaction
+     * @memberof SafeTransaction
      */
-    'data'?: string;
+    'data': string;
     /**
      * 
      * @type {string}
-     * @memberof MetaTransaction
+     * @memberof SafeTransaction
      */
-    'operation'?: string;
+    'operation': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeTransaction
+     */
+    'safeTxGas': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeTransaction
+     */
+    'baseGas': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeTransaction
+     */
+    'gasPrice': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeTransaction
+     */
+    'gasToken': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeTransaction
+     */
+    'refundReceiver': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SafeTransaction
+     */
+    'nonce': string;
 }
 /**
  * 
@@ -215,7 +257,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createBatchTransaction(body?: InlineObject, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MetaTransaction>> {
+        async createBatchTransaction(body?: InlineObject, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SafeTransaction>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createBatchTransaction(body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -249,7 +291,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createBatchTransaction(body?: InlineObject, options?: any): AxiosPromise<MetaTransaction> {
+        createBatchTransaction(body?: InlineObject, options?: any): AxiosPromise<SafeTransaction> {
             return localVarFp.createBatchTransaction(body, options).then((request) => request(axios, basePath));
         },
         /**
