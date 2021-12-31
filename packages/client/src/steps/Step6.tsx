@@ -1,4 +1,4 @@
-import { Card, Title, Text, Loader, Accordion, AccordionDetails, AccordionSummary, IconText, Button, EthHashInfo } from "@gnosis.pm/safe-react-components"
+import { Card, Title, Text, Loader, Accordion, AccordionDetails, AccordionSummary, Divider, IconText, Button, EthHashInfo } from "@gnosis.pm/safe-react-components"
 import { BigNumber, Contract, Signer } from "ethers";
 import { Web3Provider, Network } from '@ethersproject/providers';
 import { signHash, calculateSafeTransactionHash } from "@gnosis.pm/safe-contracts";
@@ -170,9 +170,14 @@ const Step6 = ({
                     </Accordion>
                 </Card>
                 <Card>
-                    <Text size="lg">2. Submit</Text>
+                    <Title size="xs">2. Submit</Title>
                     <Text size="lg">Signing transaction as <EthHashInfo hash={signerAddress} showAvatar /></Text>
-                    <Text strong size="md">Note that this address must be either an owner of this safe or a delegate of an owner.</Text>
+                    <Text strong size="md">
+                        Note that this address must be either an owner of this safe or a delegate of an owner.
+                        Signing as a delegate is preferred, as signatures from delegates are never counted toward a safe's signature threshold.
+                        To register a delegate, <a target="_blank" href="https://gnosis-delegator.badger.guru/" rel="noreferrer">try this utility</a>
+                    </Text>
+                    <Divider/>
                     <Button size="lg" onClick={proposeTransaction}>Prompt Signature</Button>
                 </Card>
             </>

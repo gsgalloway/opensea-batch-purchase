@@ -78,9 +78,9 @@ const Step3 = ({
           <Button className="CrowdedButton" size="md" color="primary" onClick={() => setIsManageListModalOpen(!isManageListModalOpen)}>
             Edit Token List
           </Button>
-          <Button className="CrowdedButton" size="md" disabled={buttonDisabled} onClick={toNextTab}>
+          {tokens.length > 0 ? <Button className="CrowdedButton" size="md" disabled={buttonDisabled} onClick={toNextTab}>
                 {tokenListError == null ? 'Continue' : tokenListError.message }
-          </Button>
+          </Button> : <div/>}
           {isManageListModalOpen && (
             <ManageListModal
               title={"Add Token"}

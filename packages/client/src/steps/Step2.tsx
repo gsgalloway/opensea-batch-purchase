@@ -12,7 +12,7 @@ type Props = {
 }
 
 const Step2 = ({networkConnectionInfo, connect, disconnect, toNextTab, supportedNetworks}: Props): React.ReactElement => {
-    const networkIsSupported = networkConnectionInfo && supportedNetworks.find(network => network.chainId == networkConnectionInfo.network.chainId)
+    const networkIsSupported = networkConnectionInfo && supportedNetworks.find(network => network.chainId === networkConnectionInfo.network.chainId)
     return (
         <Card className="card">
           <Title size="xs">Connect Web3 Provider</Title>

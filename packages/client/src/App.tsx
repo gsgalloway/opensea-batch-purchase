@@ -6,7 +6,6 @@ import { Network, getNetwork, Web3Provider } from '@ethersproject/providers';
 import { useQueries, useQuery } from 'react-query';
 import { isForSale, NetworkConnectionInfo, unreachable } from './utils';
 import Web3Modal from 'web3modal'
-import WalletLink from 'walletlink'
 import { Configuration, DefaultApi, InlineObjectNetworkEnum, SafeTransaction } from './api';
 import { OpenSeaAsset } from 'opensea-js/lib/types';
 import { Item } from '@gnosis.pm/safe-react-components/dist/navigation/Tab';
