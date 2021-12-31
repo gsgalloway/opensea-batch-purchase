@@ -54,7 +54,7 @@ const Step3 = ({
 
     return (
         <Card className="card">
-          <Text size="xl">Enter a list of tokens to purchase. For each you must provide the token's Contract Address and ID</Text>
+          <Text size="xl">Enter a list of tokens to purchase. Contract Address and ID are required for each.</Text>
           <Accordion>
             <AccordionSummary>
               <IconText

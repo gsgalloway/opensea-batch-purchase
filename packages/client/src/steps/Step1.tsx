@@ -14,7 +14,14 @@ const Step1 = ({supportedNetworks, toNextTab}: Props): React.ReactElement => {
             <Text size="xl">
                 This app allows for creation of a single transaction to purchase multiple 
                 OpenSea assets in batch from a Gnosis Safe. All purchases will
-                succeed or the transaction will revert.
+                succeed or fail in unison.
+            </Text>
+            <Divider/>
+            <Text size="md">
+                The tool uses <a href="https://www.npmjs.com/package/ethers-multisend">ethers-multisend</a> by 
+                Gnosis for batching transactions
+                and <a href="https://www.npmjs.com/package/@gsgalloway/opensea-js">opensea-js</a> for
+                crafting individual purchase transactions.
             </Text>
             <Divider/>
             <Text size="xl">Supported networks: {
