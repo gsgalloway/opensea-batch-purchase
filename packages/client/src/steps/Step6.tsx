@@ -122,9 +122,15 @@ const Step6 = ({
                         />
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Text size="lg">
-                            {safeTransaction.to}
+                        <Card>
+                        <EthHashInfo hash={safeTransaction.to} showAvatar/>
+                        <Text size="sm">
+                            This is the address 
+                            of <a href="https://github.com/gnosis/safe-contracts/blob/main/contracts/libraries/MultiSend.sol" target="_blank" rel="noreferrer">
+                                the MultiSend library
+                            </a>
                         </Text>
+                        </Card>
                     </AccordionDetails>
                     </Accordion>
                     <Accordion>
