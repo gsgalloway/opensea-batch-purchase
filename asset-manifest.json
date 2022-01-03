@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.5b546d0d.chunk.css",
-    "main.js": "/static/js/main.9d6815c7.chunk.js",
-    "main.js.map": "/static/js/main.9d6815c7.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.776c1e0d.js",
-    "runtime-main.js.map": "/static/js/runtime-main.776c1e0d.js.map",
-    "static/js/2.bb663cf5.chunk.js": "/static/js/2.bb663cf5.chunk.js",
-    "static/js/2.bb663cf5.chunk.js.map": "/static/js/2.bb663cf5.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.5b546d0d.chunk.css.map": "/static/css/main.5b546d0d.chunk.css.map",
-    "static/js/2.bb663cf5.chunk.js.LICENSE.txt": "/static/js/2.bb663cf5.chunk.js.LICENSE.txt",
-    "static/media/averta-bold.woff2": "/static/media/averta-bold.8fdcd8d4.woff2",
-    "static/media/averta-normal.woff2": "/static/media/averta-normal.39d04879.woff2",
-    "static/media/opensea_details.09ccfcc9.png": "/static/media/opensea_details.09ccfcc9.png"
+    "main.css": "/opensea-batch-purchase-react/static/css/main.5b546d0d.chunk.css",
+    "main.js": "/opensea-batch-purchase-react/static/js/main.9d6815c7.chunk.js",
+    "main.js.map": "/opensea-batch-purchase-react/static/js/main.9d6815c7.chunk.js.map",
+    "runtime-main.js": "/opensea-batch-purchase-react/static/js/runtime-main.786e00b4.js",
+    "runtime-main.js.map": "/opensea-batch-purchase-react/static/js/runtime-main.786e00b4.js.map",
+    "static/js/2.b038ca45.chunk.js": "/opensea-batch-purchase-react/static/js/2.b038ca45.chunk.js",
+    "static/js/2.b038ca45.chunk.js.map": "/opensea-batch-purchase-react/static/js/2.b038ca45.chunk.js.map",
+    "index.html": "/opensea-batch-purchase-react/index.html",
+    "static/css/main.5b546d0d.chunk.css.map": "/opensea-batch-purchase-react/static/css/main.5b546d0d.chunk.css.map",
+    "static/js/2.b038ca45.chunk.js.LICENSE.txt": "/opensea-batch-purchase-react/static/js/2.b038ca45.chunk.js.LICENSE.txt",
+    "static/media/averta-bold.woff2": "/opensea-batch-purchase-react/static/media/averta-bold.8fdcd8d4.woff2",
+    "static/media/averta-normal.woff2": "/opensea-batch-purchase-react/static/media/averta-normal.39d04879.woff2",
+    "static/media/opensea_details.09ccfcc9.png": "/opensea-batch-purchase-react/static/media/opensea_details.09ccfcc9.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.776c1e0d.js",
-    "static/js/2.bb663cf5.chunk.js",
+    "static/js/runtime-main.786e00b4.js",
+    "static/js/2.b038ca45.chunk.js",
     "static/css/main.5b546d0d.chunk.css",
     "static/js/main.9d6815c7.chunk.js"
   ]
