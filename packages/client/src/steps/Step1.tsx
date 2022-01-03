@@ -21,7 +21,8 @@ const Step1 = ({supportedNetworks, toNextTab}: Props): React.ReactElement => {
                 The tool uses <a href="https://www.npmjs.com/package/ethers-multisend">ethers-multisend</a> by 
                 Gnosis for batching transactions
                 and <a href="https://www.npmjs.com/package/@gsgalloway/opensea-js">opensea-js</a> for
-                crafting individual purchase transactions.
+                crafting individual purchase transactions. Source code for this 
+                app <a href="https://github.com/gsgalloway/opensea-batch-purchase-react">available here.</a>
             </Text>
             <Divider/>
             <Text size="xl">Supported networks: {
