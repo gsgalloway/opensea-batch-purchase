@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dts",
+    "rootDirs": ["./src", "./test", "./examples", "./typechain", "./tasks"]
+  },
+  "include": ["./scripts", "./test", "./typechain", "./src", "./tasks"],
+  "files": ["./hardhat.config.ts"]
+}

@@ -1,0 +1,135 @@
+swagger: '2.0'
+info:
+  title: opensea-bulk-purchaser-2
+  description: OpenSea Bulk Purchaser API
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+x-google-backend:
+  address: https://opensea-bulk-purchaser-2-6xfkrhkizq-uw.a.run.app
+paths:
+  /asset:
+    get:
+      summary: Fetch details of an OpenSea asset
+      operationId: get-asset
+      parameters:
+        - in: "query"
+          name: "contractAddress"
+          description: "Contract address for the token to lookup"
+          required: true
+          type: string
+          pattern: "^0x[a-fA-F0-9]{40}$"
+        - in: "query"
+          name: "id"
+          description: "Token ID to lookup"
+          required: true
+          type: string
+          pattern: "^[0-9]+$"
+        - in: "query"
+          name: "network"
+          description: Ethereum network (Rinkeby / Homestead)
+          required: true
+          type: string
+          enum: [rinkeby, homestead]
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+        '404':
+          description: 'Not Found'
+        '500':
+          description: 'Internal Server Error'
+    options:
+      operationId: get-asset-cors
+      responses:
+        200:
+          description: Success
+  /batch-transaction:
+    post:
+      summary: Create a batch transaction
+      operationId: create-batch-transaction
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: object
+            required:
+              - tokens
+              - network
+              - recipient
+              - gnosisSafeAddress
+            properties:
+              tokens:
+                type: array
+                items:
+                  $ref: '#/definitions/Token'
+              network:
+                type: string
+                description: Ethereum network (Rinkeby / Homestead)
+                enum: [rinkeby, homestead]
+              recipient:
+                $ref: "#/definitions/Address"
+              gnosisSafeAddress:
+                $ref: "#/definitions/Address"
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/SafeTransaction'
+        '500':
+          description: 'Internal Server Error'
+    options:
+      operationId: create-batch-transaction-cors
+      responses:
+        200:
+          description: Success
+definitions:
+  Address:
+    type: string
+    pattern: "^0x[a-fA-F0-9]{40}$"
+  SafeTransaction:
+    properties:
+      to:
+        $ref: '#/definitions/Address'
+      value:
+        type: string
+      data:
+        type: string
+      operation:
+        type: string
+      safeTxGas:
+        type: string
+      baseGas:
+        type: string
+      gasPrice:
+        type: string
+      gasToken:
+        $ref: '#/definitions/Address'
+      refundReceiver:
+        $ref: '#/definitions/Address'
+      nonce:
+        type: string
+    required:
+      - "to"
+      - "value"
+      - "data"
+      - "operation"
+      - "safeTxGas"
+      - "baseGas"
+      - "gasPrice"
+      - "gasToken"
+      - "refundReceiver"
+      - "nonce"
+  Token:
+    properties:
+      contractAddress:
+        $ref: '#/definitions/Address'
+      id:
+        type: string
+        pattern: "^[0-9]+$"
+    required:
+      - "contractAddress"
+      - "id"

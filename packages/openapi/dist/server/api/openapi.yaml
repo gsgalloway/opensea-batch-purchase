@@ -1,0 +1,183 @@
+openapi: 3.0.1
+info:
+  description: Sample API on API Gateway with a Google Cloud Functions backend
+  title: API_ID optional-string
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /asset:
+    get:
+      operationId: get-asset
+      parameters:
+      - description: Contract address for the token to lookup
+        in: query
+        name: contractAddress
+        required: true
+        schema:
+          pattern: ^0x[a-fA-F0-9]{40}$
+          type: string
+      - description: Token ID to lookup
+        in: query
+        name: id
+        required: true
+        schema:
+          pattern: ^[0-9]+$
+          type: string
+      - description: Ethereum network (Rinkeby / Homestead)
+        in: query
+        name: network
+        required: true
+        schema:
+          enum:
+          - rinkeby
+          - homestead
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Success
+      summary: Fetch details of an OpenSea asset
+      x-eov-operation-handler: controllers/DefaultController
+  /batch-transaction:
+    post:
+      operationId: create-batch-transaction
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object'
+        content:
+          '*/*':
+            schema:
+              properties:
+                tokens:
+                  items:
+                    $ref: '#/components/schemas/Token'
+                  type: array
+                network:
+                  description: Ethereum network (Rinkeby / Homestead)
+                  enum:
+                  - rinkeby
+                  - homestead
+                  type: string
+                recipient:
+                  pattern: ^0x[a-fA-F0-9]{40}$
+                  type: string
+                gnosisSafeAddress:
+                  pattern: ^0x[a-fA-F0-9]{40}$
+                  type: string
+              required:
+              - gnosisSafeAddress
+              - network
+              - recipient
+              - tokens
+              type: object
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SafeTransaction'
+          description: Success
+      summary: Create a batch transaction
+      x-codegen-request-body-name: body
+      x-eov-operation-handler: controllers/DefaultController
+components:
+  requestBodies:
+    inline_object:
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/inline_object'
+      required: false
+  schemas:
+    Address:
+      pattern: ^0x[a-fA-F0-9]{40}$
+      type: string
+    SafeTransaction:
+      example:
+        data: data
+        safeTxGas: safeTxGas
+        baseGas: baseGas
+        refundReceiver: refundReceiver
+        gasToken: gasToken
+        to: to
+        value: value
+        operation: operation
+        nonce: nonce
+        gasPrice: gasPrice
+      properties:
+        to:
+          pattern: ^0x[a-fA-F0-9]{40}$
+          type: string
+        value:
+          type: string
+        data:
+          type: string
+        operation:
+          type: string
+        safeTxGas:
+          type: string
+        baseGas:
+          type: string
+        gasPrice:
+          type: string
+        gasToken:
+          pattern: ^0x[a-fA-F0-9]{40}$
+          type: string
+        refundReceiver:
+          pattern: ^0x[a-fA-F0-9]{40}$
+          type: string
+        nonce:
+          type: string
+      required:
+      - baseGas
+      - data
+      - gasPrice
+      - gasToken
+      - nonce
+      - operation
+      - refundReceiver
+      - safeTxGas
+      - to
+      - value
+      type: object
+    Token:
+      properties:
+        contractAddress:
+          pattern: ^0x[a-fA-F0-9]{40}$
+          type: string
+        id:
+          pattern: ^[0-9]+$
+          type: string
+      required:
+      - contractAddress
+      - id
+      type: object
+    inline_object:
+      properties:
+        tokens:
+          items:
+            $ref: '#/components/schemas/Token'
+          type: array
+        network:
+          description: Ethereum network (Rinkeby / Homestead)
+          enum:
+          - rinkeby
+          - homestead
+          type: string
+        recipient:
+          pattern: ^0x[a-fA-F0-9]{40}$
+          type: string
+        gnosisSafeAddress:
+          pattern: ^0x[a-fA-F0-9]{40}$
+          type: string
+      required:
+      - gnosisSafeAddress
+      - network
+      - recipient
+      - tokens
+      type: object
+x-original-swagger-version: "2.0"

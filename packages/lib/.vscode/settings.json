@@ -1,0 +1,6 @@
+{
+    "eslint.lintTask.enable": true,
+    "eslint.packageManager": "yarn",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
