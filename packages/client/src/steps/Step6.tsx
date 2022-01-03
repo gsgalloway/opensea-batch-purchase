@@ -181,7 +181,7 @@ const Step6 = ({
                     <Text strong size="md">
                         Note that this address must be either an owner of this safe or a delegate of an owner.
                         Signing as a delegate is preferred, as signatures from delegates are never counted toward a safe's signature threshold.
-                        To register a delegate, <a target="_blank" href="https://gnosis-delegator.badger.guru/" rel="noreferrer">try this utility</a>
+                        To register a delegate, <a target="_blank" href="https://gnosis-delegator.badger.guru/" rel="noreferrer">try this utility.</a>
                     </Text>
                     <Divider/>
                     <Button size="lg" onClick={proposeTransaction}>Prompt Signature</Button>

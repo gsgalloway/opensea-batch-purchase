@@ -42,6 +42,11 @@ paths:
           description: 'Not Found'
         '500':
           description: 'Internal Server Error'
+    options:
+      operationId: get-asset-cors
+      responses:
+        200:
+          description: Success
   /batch-transaction:
     post:
       summary: Create a batch transaction
@@ -76,6 +81,11 @@ paths:
             $ref: '#/definitions/SafeTransaction'
         '500':
           description: 'Internal Server Error'
+    options:
+      operationId: create-batch-transaction-cors
+      responses:
+        200:
+          description: Success
 definitions:
   Address:
     type: string
