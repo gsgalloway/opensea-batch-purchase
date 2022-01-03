@@ -1,12 +1,14 @@
 swagger: '2.0'
 info:
-  title: API_ID optional-string
-  description: Sample API on API Gateway with a Google Cloud Functions backend
+  title: opensea-bulk-purchaser-2
+  description: OpenSea Bulk Purchaser API
   version: 1.0.0
 schemes:
   - https
 produces:
   - application/json
+x-google-backend:
+  address: https://opensea-bulk-purchaser-2-6xfkrhkizq-uw.a.run.app
 paths:
   /asset:
     get:

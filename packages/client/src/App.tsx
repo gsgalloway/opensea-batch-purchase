@@ -29,7 +29,7 @@ const loadTokenAsset = async (token: TokenDescription, api: DefaultApi, network:
   const sellOrders = (resp.data as OpenSeaAsset).sellOrders
   if (sellOrders) {
       sellOrders.sort((order1, order2) => {
-          const [bn1, bn2] = [order1, order2].map(BigNumber.from)
+          const [bn1, bn2] = [order1.basePrice, order2.basePrice].map(BigNumber.from)
           if (bn1.lt(bn2)) return -1
           if (bn1.gt(bn2)) return 1
           return 0;
@@ -39,7 +39,7 @@ const loadTokenAsset = async (token: TokenDescription, api: DefaultApi, network:
 }
 
 const api = new DefaultApi(new Configuration({
-  basePath: "http://localhost:8080",
+  basePath: process.env.REACT_APP_API_HOST ?? "http://localhost:8080",
 }));
 
 const SafeApp = (): React.ReactElement => {
