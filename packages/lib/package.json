@@ -15,7 +15,7 @@
     "node": ">= 14"
   },
   "description": "Utility for batch purchases of assets on OpenSea",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "main": "./dist/src/index.js",
   "directories": {
     "test": "test"
@@ -34,6 +34,17 @@
     "simulate-erc721-purchase": "./bin/simulate-erc721-purchase.sh"
   },
   "homepage": "https://github.com/gsgalloway/opensea-batch-purchase/tree/main/packages/lib#readme",
+  "keywords": [
+    "ethereum",
+    "smart-contracts",
+    "gnosis",
+    "blockchain",
+    "dapps",
+    "opensea",
+    "tooling",
+    "project-opensea",
+    "non-fungible-tokens"
+  ],
   "dependencies": {
     "@ethersproject/networks": "^5.5.1",
     "@ethersproject/providers": "^5.5.0",
