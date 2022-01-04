@@ -1,4 +1,4 @@
-# OpenSea Bulk Purchaser
+# OpenSea Batch Purchaser
 
 Library for crafting batch transactions to purchase multiple OpenSea assets from a single Gnosis Safe Transaction
 
