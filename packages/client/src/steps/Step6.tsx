@@ -183,11 +183,13 @@ const Step6 = ({
                         Signing as a delegate is preferred, as signatures from delegates are never counted toward a safe's signature threshold.
                         To register a delegate, <a target="_blank" href="https://gnosis-delegator.badger.guru/" rel="noreferrer">try this utility.</a>
                     </Text>
+                    <Divider/>
+                    <Text size="lg">Validating the transaction:</Text>
                     <Text strong size="md">
                         An invocation of
                         OpenSea's <a target="_blank" href="https://etherscan.io/address/0x7be8076f4ea4a4ad08075c2508e481d6c946d12b#code#L1363" rel="noreferrer">public function for fulfilling an order</a> is
-                        difficult to understand at a glance. Additionally, the failure modes for these purchases can be quite opaque. In order to gain confidence in the correctness of a transaction before 
-                        its broadcast, it is recommended to try simulating the transaction before approval and once again just before broadcast. A tool for simulating Gnosis Safe transactions created by this tool
+                        difficult to understand at a glance and its failure modes are opaque. To gain confidence in the correctness of a transaction before 
+                        its broadcast, it is recommended to simulate the transaction before approval and once again just before broadcast. A tool for simulating Gnosis Safe transactions created by this tool
                         is available <a target="_blank" href="https://github.com/gsgalloway/opensea-batch-purchase/blob/main/packages/lib/README.md#simulating-a-transaction-before-execution" rel="noreferrer">here.</a>
                     </Text>
                     <Divider/>
