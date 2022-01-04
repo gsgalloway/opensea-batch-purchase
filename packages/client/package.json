@@ -2,7 +2,7 @@
   "name": "client",
   "private": true,
   "version": "0.0.1",
-  "homepage": "https://gsgalloway.github.io/opensea-batch-purchase-react/",
+  "homepage": "https://opensea-batch.oss.standardcryptovc.com",
   "dependencies": {
     "@gnosis.pm/safe-apps-react-sdk": "^4.0.4",
     "@gnosis.pm/safe-core-sdk": "^1.1.0",
