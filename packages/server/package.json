@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
-    "build": "rimraf ./dist/**/* && yarn tsc --skipLibCheck",
-    "start": "yarn build && node ./dist/index.js"
+    "build": "rimraf ./dist/**/* && env READABLE_STREAM=disable yarn tsc --skipLibCheck",
+    "start": "yarn build && env READABLE_STREAM=disable node ./dist/index.js"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.5.1",
