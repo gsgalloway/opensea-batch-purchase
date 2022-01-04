@@ -87,7 +87,6 @@ export default class API {
     const openseaBulkPurchaser = new OpenseaBulkPurchaser(ethProvider, { openseaApiKey, network, alchemyApiKey })
     const purchaseTxs: SinglePurchaseTx[] = []
     for (const token of tokens) {
-      // TODO: rate limit
       const purchaseTx = await openseaBulkPurchaser.createSingleTokenPurchase(
         token.id,
         token.contractAddress,

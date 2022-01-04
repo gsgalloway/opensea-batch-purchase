@@ -10,7 +10,7 @@ require("hardhat-dependency-compiler");
 require("hardhat-gas-reporter");
 require("@nomiclabs/hardhat-etherscan");
 require("./tasks");
-(0, dotenv_1.config)({ path: (0, path_1.resolve)(__dirname, "./.env") });
+(0, dotenv_1.config)({ path: (0, path_1.resolve)(__dirname, './.env') });
 const chainIds = {
     ganache: 1337,
     goerli: 5,
@@ -28,7 +28,7 @@ const settings = {
         runs: 800,
     },
 };
-const compilers = [{ version: "0.3.6", settings }];
+const compilers = [{ version: '0.3.6', settings }];
 for (let v4 = 0; v4 < 27; v4++) {
     compilers.push({ version: `0.4.${v4}`, settings });
 }
@@ -44,20 +44,19 @@ for (let v7 = 0; v7 < 7; v7++) {
 for (let v8 = 0; v8 < 11; v8++) {
     compilers.push({ version: `0.8.${v8}`, settings });
 }
-const alchemyMainnetUrl = (_a = process.env.ALCHEMY_MAINNET_URL) !== null && _a !== void 0 ? _a : "";
-const latestBlockNumber = parseInt(
-// eslint-disable-next-line
-process.env.LATEST_BLOCK_NUMBER || "13635446");
+const alchemyMainnetUrl = (_a = process.env.ALCHEMY_MAINNET_URL) !== null && _a !== void 0 ? _a : '';
+if (alchemyMainnetUrl === '') {
+    console.warn('No value for env var ALCHEMY_MAINNET_URL set!');
+}
 const config = {
-    defaultNetwork: "hardhat",
+    defaultNetwork: 'hardhat',
     networks: {
         hardhat: {
-            hardfork: "london",
-            gasPrice: "auto",
+            hardfork: 'london',
+            gasPrice: 'auto',
             chainId: chainIds.mainnet,
             forking: {
                 url: alchemyMainnetUrl,
-                // blockNumber: latestBlockNumber,
             },
             throwOnCallFailures: true,
             loggingEnabled: false,
@@ -67,18 +66,18 @@ const config = {
         compilers,
     },
     gasReporter: {
-        currency: "USD",
+        currency: 'USD',
         // eslint-disable-next-line
         enabled: !!process.env.REPORT_GAS,
         excludeContracts: [],
-        src: "./contracts",
+        src: './contracts',
     },
     typechain: {
-        outDir: "typechain",
-        target: "ethers-v5",
+        outDir: 'typechain',
+        target: 'ethers-v5',
     },
     dependencyCompiler: {
-        paths: ["@gnosis.pm/safe-contracts/contracts/GnosisSafeL2.sol"],
+        paths: ['@gnosis.pm/safe-contracts/contracts/GnosisSafeL2.sol'],
     },
 };
 exports.default = config;

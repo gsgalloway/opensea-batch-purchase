@@ -2,18 +2,38 @@
   "name": "@standard-crypto/opensea-batch-purchaser",
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
-    "build": "yarn clean && yarn compile && env READABLE_STREAM=disable yarn tsc -p ./tsconfig.dist.json",
-    "clean": "rm -rf dist dts",
-    "compile": "yarn hardhat compile",
+    "build": "yarn clean && yarn compile && cp -r ./artifacts ./dist && READABLE_STREAM=disable yarn tsc -p ./tsconfig.dist.json",
+    "clean": "rimraf dist/* dts/*",
+    "compile": "READABLE_STREAM=disable yarn hardhat compile",
     "test": "yarn hardhat test",
     "rollup": "rollup -c",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
-    "hardhat": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' ./node_modules/.bin/hardhat"
+    "hardhat": "READABLE_STREAM=disable TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' ./node_modules/.bin/hardhat"
   },
   "engines": {
     "node": ">= 14"
   },
+  "description": "Utility for batch purchases of assets on OpenSea",
+  "version": "0.0.10",
+  "main": "./dist/src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "types": "dist/src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gsgalloway/opensea-batch-purchase.git"
+  },
+  "author": "Gavi Galloway",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gsgalloway/opensea-batch-purchase/issues"
+  },
+  "bin": {
+    "simulate-erc721-purchase": "./bin/simulate-erc721-purchase.sh"
+  },
+  "homepage": "https://github.com/gsgalloway/opensea-batch-purchase/tree/main/packages/lib#readme",
   "dependencies": {
     "@ethersproject/networks": "^5.5.1",
     "@ethersproject/providers": "^5.5.0",
@@ -65,6 +85,7 @@
     "itertools": "^1.7.1",
     "prettier": "^2.4.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "rimraf": "^3.0.2",
     "rollup": "^2.56.3",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-dts": "^4.0.1",
@@ -78,22 +99,5 @@
     "typechain": "^5.2.0",
     "typescript": "^4.4.4",
     "web3": "1.6.1"
-  },
-  "description": "Utility for batch purchases of assets on OpenSea",
-  "version": "0.0.10",
-  "main": "./dist/src/index.js",
-  "directories": {
-    "test": "test"
-  },
-  "types": "dist/src/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gsgalloway/opensea-batch-purchase.git"
-  },
-  "author": "Gavi Galloway",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gsgalloway/opensea-batch-purchase/issues"
-  },
-  "homepage": "https://github.com/gsgalloway/opensea-batch-purchase/tree/main/packages/lib#readme"
+  }
 }

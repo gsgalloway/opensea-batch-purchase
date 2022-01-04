@@ -48,7 +48,10 @@ for (let v8 = 0; v8 < 11; v8++) {
   compilers.push({ version: `0.8.${v8}`, settings })
 }
 
-const alchemyMainnetUrl = process.env.ALCHEMY_MAINNET_URL!
+const alchemyMainnetUrl = process.env.ALCHEMY_MAINNET_URL ?? ''
+if (alchemyMainnetUrl === '') {
+  console.warn('No value for env var ALCHEMY_MAINNET_URL set!')
+}
 
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
