@@ -49,9 +49,6 @@ _app.use(express_1.default.json());
 _app.use((0, cors_1.default)({
     origin: '*',
 }));
-_app.get('/hello', function (req, res) {
-    res.send('Hello!');
-});
 _app.get('/asset', function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = req.query;
@@ -64,8 +61,9 @@ _app.get('/asset', function (req, res, next) {
         catch (e) {
             if (e instanceof Error) {
                 if (e.message.includes('404: Not found')) {
+                    console.info(`Requested asset not found: ${JSON.stringify(token)}`);
                     res.sendStatus(404);
-                    res.send('');
+                    return;
                 }
                 else {
                     console.error(e);
@@ -93,6 +91,13 @@ _app.post('/batch-transaction', function (req, res, next) {
             res.json(Object.assign(Object.assign({}, safeTx), { value: ethers_1.BigNumber.from(safeTx.value).toString(), operation: ethers_1.BigNumber.from(safeTx.operation).toString(), safeTxGas: ethers_1.BigNumber.from(safeTx.safeTxGas).toString(), baseGas: ethers_1.BigNumber.from(safeTx.baseGas).toString(), gasPrice: ethers_1.BigNumber.from(safeTx.gasPrice).toString(), nonce: ethers_1.BigNumber.from(safeTx.nonce).toString() }));
         }
         catch (e) {
+            if (e instanceof Error) {
+                if (e.message.includes('revert')) {
+                    res.sendStatus(400);
+                    console.warn("Requested transaction would be reverted.", e);
+                    return;
+                }
+            }
             console.error(e);
             next(e);
         }

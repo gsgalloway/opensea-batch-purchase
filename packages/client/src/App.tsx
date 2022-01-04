@@ -90,8 +90,11 @@ const SafeApp = (): React.ReactElement => {
       recipient: safeAddress,
       tokens: serializedTokens,
     }, {
-      validateStatus: (status) => status === 200,  
+      validateStatus: (status) => status === 200 || status === 400,  
     })
+    if (response.status === 400) {
+      throw new Error("Invalid transaction. Check that all requested assets are still for sale and that the purchasing account has sufficient funds.")
+    }
     return response.data;
   }
 

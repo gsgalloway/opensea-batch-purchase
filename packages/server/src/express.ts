@@ -51,11 +51,6 @@ _app.use(
     origin: '*',
   }),
 )
-
-_app.get('/hello', function (req, res) {
-  res.send('Hello!')
-})
-
 interface GetAssetParams {
   contractAddress: string
   id: string
@@ -64,7 +59,7 @@ interface GetAssetParams {
 
 _app.get(
   '/asset',
-  async function (req: Request<EmptyObject, OpenSeaAsset | '', EmptyObject, GetAssetParams>, res, next): Promise<void> {
+  async function (req: Request<EmptyObject, OpenSeaAsset, EmptyObject, GetAssetParams>, res, next): Promise<void> {
     const token: Token = req.query
     const { network: networkName } = req.query
     const network = getNetwork(networkName)
@@ -74,8 +69,9 @@ _app.get(
     } catch (e) {
       if (e instanceof Error) {
         if (e.message.includes('404: Not found')) {
+          console.info(`Requested asset not found: ${JSON.stringify(token)}`)
           res.sendStatus(404)
-          res.send('')
+          return
         } else {
           console.error(e)
           next(e)
@@ -97,7 +93,7 @@ interface BatchTransactionParams {
 
 _app.post(
   '/batch-transaction',
-  async function (req: Request<EmptyObject, SafeTransaction, BatchTransactionParams, EmptyObject>, res, next) {
+  async function (req: Request<EmptyObject, SafeTransaction | string, BatchTransactionParams, EmptyObject>, res, next) {
     try {
       const { tokens, network: networkName, recipient, gnosisSafeAddress } = req.body
       const network = getNetwork(networkName)
@@ -117,6 +113,14 @@ _app.post(
         nonce: BigNumber.from(safeTx.nonce).toString(),
       })
     } catch (e) {
+      if (e instanceof Error) {
+        if (e.message.includes('revert')) {
+          res.sendStatus(400)
+          console.warn("Requested transaction would be reverted.", e)
+          return
+        }
+      }
+
       console.error(e)
       next(e)
     }

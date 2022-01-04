@@ -1,6 +1,9 @@
-import 'dotenv'
+import dotenv from 'dotenv'
+dotenv.config();
+
 import { app } from './express'
 import http from 'http'
+
 
 const port = 8080
 
