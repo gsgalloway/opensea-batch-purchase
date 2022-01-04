@@ -22,8 +22,11 @@ To verify that a batch transaction will succeed when executed, use the following
 1. Run
 
    ```sh
-   # hardhat peer dependency required for simulating transactions locally
-   npm install hardhat @standard-crypto/opensea-batch-purchaser
+   # hardhat peer dependencies required for simulating transactions locally
+   npm install \
+      hardhat \
+      @nomiclabs/hardhat-ethers \
+      @standard-crypto/opensea-batch-purchaser
 
    # Replace with your Alchemy app URL
    export ALCHEMY_MAINNET_URL=https://eth-mainnet.alchemyapi.io/v2/XXXXXXX

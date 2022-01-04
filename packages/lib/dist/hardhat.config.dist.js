@@ -1,16 +1,8 @@
 "use strict";
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = require("dotenv");
-const path_1 = require("path");
-require("@typechain/hardhat");
 require("@nomiclabs/hardhat-ethers");
-require("@nomiclabs/hardhat-waffle");
-require("hardhat-dependency-compiler");
-require("hardhat-gas-reporter");
-require("@nomiclabs/hardhat-etherscan");
 require("./tasks");
-(0, dotenv_1.config)({ path: (0, path_1.resolve)(__dirname, './.env') });
 const chainIds = {
     ganache: 1337,
     goerli: 5,
@@ -21,8 +13,6 @@ const chainIds = {
     ropsten: 3,
 };
 const settings = {
-    // You should disable the optimizer when debugging
-    // https://hardhat.org/hardhat-network/#solidity-optimizer-support
     optimizer: {
         enabled: false,
         runs: 800,
@@ -64,20 +54,6 @@ const config = {
     },
     solidity: {
         compilers,
-    },
-    gasReporter: {
-        currency: 'USD',
-        // eslint-disable-next-line
-        enabled: !!process.env.REPORT_GAS,
-        excludeContracts: [],
-        src: './contracts',
-    },
-    typechain: {
-        outDir: 'typechain',
-        target: 'ethers-v5',
-    },
-    dependencyCompiler: {
-        paths: ['@gnosis.pm/safe-contracts/contracts/GnosisSafeL2.sol'],
     },
 };
 exports.default = config;

@@ -15,7 +15,7 @@
     "node": ">= 14"
   },
   "description": "Utility for batch purchases of assets on OpenSea",
-  "version": "0.0.10",
+  "version": "0.0.12",
   "main": "./dist/src/index.js",
   "directories": {
     "test": "test"
