@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Enum",
+  "sourceName": "@gnosis.pm/safe-contracts/contracts/common/Enum.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220d442e6b92497a57234f67faaef0d1a07d8314bd1cb07cf89b7b5ff6eb97d3e8e64736f6c634300080a0033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220d442e6b92497a57234f67faaef0d1a07d8314bd1cb07cf89b7b5ff6eb97d3e8e64736f6c634300080a0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

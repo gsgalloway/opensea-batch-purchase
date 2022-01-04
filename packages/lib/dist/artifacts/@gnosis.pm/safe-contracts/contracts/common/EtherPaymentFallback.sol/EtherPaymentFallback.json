@@ -1,0 +1,34 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "EtherPaymentFallback",
+  "sourceName": "@gnosis.pm/safe-contracts/contracts/common/EtherPaymentFallback.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "SafeReceived",
+      "type": "event"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060c18061001f6000396000f3fe6080604052366056573373ffffffffffffffffffffffffffffffffffffffff167f3d0ce9bfc3ed7d6862dbb28b2dea94561fe714a1b4d019aa8af39730d1ad7c3d34604051604c91906072565b60405180910390a2005b600080fd5b6000819050919050565b606c81605b565b82525050565b6000602082019050608560008301846065565b9291505056fea2646970667358221220e3f44804914ffad2f85531e35bd08207942efe0097d6ebd3a8243bf28179272e64736f6c634300080a0033",
+  "deployedBytecode": "0x6080604052366056573373ffffffffffffffffffffffffffffffffffffffff167f3d0ce9bfc3ed7d6862dbb28b2dea94561fe714a1b4d019aa8af39730d1ad7c3d34604051604c91906072565b60405180910390a2005b600080fd5b6000819050919050565b606c81605b565b82525050565b6000602082019050608560008301846065565b9291505056fea2646970667358221220e3f44804914ffad2f85531e35bd08207942efe0097d6ebd3a8243bf28179272e64736f6c634300080a0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

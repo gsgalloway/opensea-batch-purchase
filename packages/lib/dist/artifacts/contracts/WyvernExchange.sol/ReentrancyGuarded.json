@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ReentrancyGuarded",
+  "sourceName": "contracts/WyvernExchange.sol",
+  "abi": [],
+  "bytecode": "0x608060405260008060006101000a81548160ff021916908315150217905550348015602957600080fd5b5060358060376000396000f3006080604052600080fd00a165627a7a7230582028484c4484cbc692b43ed2e817a2c9450684ee58f7dec2a7f8d3d1b9c89d1f1b0029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a7230582028484c4484cbc692b43ed2e817a2c9450684ee58f7dec2a7f8d3d1b9c89d1f1b0029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
