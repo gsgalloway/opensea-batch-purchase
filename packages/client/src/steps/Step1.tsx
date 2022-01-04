@@ -27,7 +27,7 @@ const Step1 = ({supportedNetworks, toNextTab}: Props): React.ReactElement => {
             <Divider/>
             <Text size="xl">Supported networks: {
                 supportedNetworks.map((network) =>
-                    (<span className="NetworkName">{capitalizeFirstLetter(network.name)} </span>))
+                (<span className="NetworkName">{capitalizeFirstLetter(network.name)}</span>))
             }
             </Text>
             <Divider/>
