@@ -79,6 +79,8 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/SafeTransaction'
+        '400':
+          description: 'Transaction creation failed'
         '500':
           description: 'Internal Server Error'
     options:
