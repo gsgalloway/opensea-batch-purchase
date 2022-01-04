@@ -4,10 +4,7 @@
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
     "build": "rimraf ./dist/**/* && yarn tsc --skipLibCheck",
-    "build-bak": "rimraf ./dist/**/* && rollup -c rollup.config.js",
-    "start": "functions-framework --source=dist/ --target=app",
-    "dev": "ts-node-dev --respawn --pretty src/index.ts",
-    "watch": "concurrently \"tsc -w\" \"nodemon --watch ./dist/ --exec npm run start\""
+    "start": "yarn build && node ./dist/index.js"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.5.1",

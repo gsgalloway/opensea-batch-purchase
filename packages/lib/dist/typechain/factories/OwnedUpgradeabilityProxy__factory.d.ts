@@ -1,0 +1,64 @@
+import { Signer, ContractFactory, Overrides } from "ethers";
+import { Provider, TransactionRequest } from "@ethersproject/providers";
+import type { OwnedUpgradeabilityProxy, OwnedUpgradeabilityProxyInterface } from "../OwnedUpgradeabilityProxy";
+export declare class OwnedUpgradeabilityProxy__factory extends ContractFactory {
+    constructor(...args: [signer: Signer] | ConstructorParameters<typeof ContractFactory>);
+    deploy(overrides?: Overrides & {
+        from?: string | Promise<string>;
+    }): Promise<OwnedUpgradeabilityProxy>;
+    getDeployTransaction(overrides?: Overrides & {
+        from?: string | Promise<string>;
+    }): TransactionRequest;
+    attach(address: string): OwnedUpgradeabilityProxy;
+    connect(signer: Signer): OwnedUpgradeabilityProxy__factory;
+    static readonly bytecode = "0x608060405234801561001057600080fd5b50610733806100206000396000f300608060405260043610610083576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063025313a2146100f25780633659cfe6146101495780634555d5c91461018c5780634f1ef286146101b75780635c60da1b146102335780636fde82021461028a578063f1739cae146102e1575b600061008d610324565b9050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156100cb57600080fd5b60405136600082376000803683855af43d806000843e81600081146100ee578184f35b8184fd5b3480156100fe57600080fd5b5061010761034d565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561015557600080fd5b5061018a600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061035c565b005b34801561019857600080fd5b506101a16103a9565b6040518082815260200191505060405180910390f35b610231600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091929192905050506103b2565b005b34801561023f57600080fd5b50610248610324565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561029657600080fd5b5061029f610490565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156102ed57600080fd5b50610322600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506104ba565b005b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b6000610357610490565b905090565b61036461034d565b73ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561039d57600080fd5b6103a6816105e1565b50565b60006002905090565b6103ba61034d565b73ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156103f357600080fd5b6103fc8261035c565b3073ffffffffffffffffffffffffffffffffffffffff168160405180828051906020019080838360005b83811015610441578082015181840152602081019050610426565b50505050905090810190601f16801561046e5780820380516001836020036101000a031916815260200191505b50915050600060405180830381855af4915050151561048c57600080fd5b5050565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b6104c261034d565b73ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156104fb57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561053757600080fd5b7f5a3e66efaa1e445ebd894728a69d6959842ea1e97bd79b892797106e270efcd961056061034d565b82604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390a16105de816106c3565b50565b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff161415151561063d57600080fd5b806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508073ffffffffffffffffffffffffffffffffffffffff167fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b60405160405180910390a250565b80600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a723058204f856c0619e7921cbd556d8ad1952bf372ac71268ac8a0ad7d144aa2866141d20029";
+    static readonly abi: ({
+        constant: boolean;
+        inputs: never[];
+        name: string;
+        outputs: {
+            name: string;
+            type: string;
+        }[];
+        payable: boolean;
+        stateMutability: string;
+        type: string;
+        anonymous?: undefined;
+    } | {
+        constant: boolean;
+        inputs: {
+            name: string;
+            type: string;
+        }[];
+        name: string;
+        outputs: never[];
+        payable: boolean;
+        stateMutability: string;
+        type: string;
+        anonymous?: undefined;
+    } | {
+        payable: boolean;
+        stateMutability: string;
+        type: string;
+        constant?: undefined;
+        inputs?: undefined;
+        name?: undefined;
+        outputs?: undefined;
+        anonymous?: undefined;
+    } | {
+        anonymous: boolean;
+        inputs: {
+            indexed: boolean;
+            name: string;
+            type: string;
+        }[];
+        name: string;
+        type: string;
+        constant?: undefined;
+        outputs?: undefined;
+        payable?: undefined;
+        stateMutability?: undefined;
+    })[];
+    static createInterface(): OwnedUpgradeabilityProxyInterface;
+    static connect(address: string, signerOrProvider: Signer | Provider): OwnedUpgradeabilityProxy;
+}

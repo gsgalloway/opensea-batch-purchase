@@ -5,11 +5,7 @@ import { AlchemyProvider, JsonRpcProvider } from '@ethersproject/providers'
 import OpenseaBulkPurchaser, { SinglePurchaseTx } from '@standard-crypto/opensea-batch-purchaser'
 import { SafeTransaction } from '@gnosis.pm/safe-contracts'
 
-function unreachable(value: never, message: string): Error {
-  throw new Error(message)
-}
-
-type Token = {
+interface Token {
   id: string
   contractAddress: string
 }
@@ -17,8 +13,8 @@ type Token = {
 export default class API {
   constructor(
     private readonly openseaApiKeys: { mainnet: string; rinkeby: string },
-    private readonly ethProviders: { mainnet: JsonRpcProvider, rinkeby: JsonRpcProvider },
-    private readonly alchemyApiKeys: { mainnet: string, rinkeby: string },
+    private readonly ethProviders: { mainnet: JsonRpcProvider; rinkeby: JsonRpcProvider },
+    private readonly alchemyApiKeys: { mainnet: string; rinkeby: string },
   ) {}
 
   private openseaApiKeyFromNetwork(network: Network): string {
@@ -99,7 +95,7 @@ export default class API {
       )
       purchaseTxs.push(purchaseTx)
     }
-    const metaTx = await openseaBulkPurchaser.createBatchTxFromPurchases(purchaseTxs);
+    const metaTx = await openseaBulkPurchaser.createBatchTxFromPurchases(purchaseTxs)
     const safeTx = await openseaBulkPurchaser.safeTransactionFromMetaTransaction(metaTx, safeAddr)
     return safeTx
   }

@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import 'dotenv'
 import { app } from './express'
 import http from 'http'
 
