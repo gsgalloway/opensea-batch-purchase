@@ -79,22 +79,21 @@
     "typescript": "^4.4.4",
     "web3": "1.6.1"
   },
-  "description": "Utility for bulk purchases of assets on OpenSea",
+  "description": "Utility for batch purchases of assets on OpenSea",
   "version": "0.0.10",
   "main": "./dist/src/index.js",
-  "module": "./dist/index.es.js",
   "directories": {
     "test": "test"
   },
   "types": "dist/src/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gsgalloway/opensea-bulk-purchaser.git"
+    "url": "git+https://github.com/gsgalloway/opensea-batch-purchase.git"
   },
   "author": "Gavi Galloway",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gsgalloway/opensea-bulk-purchaser/issues"
+    "url": "https://github.com/gsgalloway/opensea-batch-purchase/issues"
   },
-  "homepage": "https://github.com/gsgalloway/opensea-bulk-purchaser#readme"
+  "homepage": "https://github.com/gsgalloway/opensea-batch-purchase/tree/main/packages/lib#readme"
 }
