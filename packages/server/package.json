@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.5.1",
-    "@standard-crypto/opensea-batch-purchaser": "0.0.12",
+    "@standard-crypto/opensea-batch-purchaser": "0.0.13",
     "@standard-crypto/opensea-batch-purchaser-openapi": "1.0.0",
     "cors": "^2.8.5",
     "electron": "^16.0.5",
